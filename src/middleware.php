@@ -7,10 +7,9 @@ use \Psr\Http\Message\ResponseInterface as Response;
 // e.g: $app->add(new \Slim\Csrf\Guard);
 
 
-
 // TODO: Add middleware user authentication
 
-// validate that user with type admin actually is an administrator!
+// validar que o user com type admin de fato é um administrador!
 
 $app->add(function (Request $request, Response $response, callable $next) {
     // Use the PSR 7 $response object

@@ -6,59 +6,65 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 // Controllers
 use \Controller\UserController as UserController;
-// create the controllers matter, grades and etc. to separate the logic of each group of routes
+use \Controller\DisciplinaController as DisciplinaController;
+use \Controller\NotasController as NotasController;
+use \Controller\AdminController as AdminController;
+
+// criar os controllers materia, notas e etc. para separar a logica de cada grupo de rotas
 
 // Routes
 
-// Generic route for a user (teacher or student)
-$app->group('/{_:user|teacher|student}/{uid}', function () {
+// route generica para um user (prof ou aluno)
+$app->group('/{_:user|professor|aluno}/{uid}', function () {
 
     // call controller
     // CRUD User
-    $this->post('', UserController::class . ':new');
-    $this->get('', UserController::class . ':detailUser');
-    $this->put('', UserController::class . ':update');
-    $this->delete('', UserController::class . ':delete');
+    $this->post('', UserController::class . ':novo');
+    $this->get('', UserController::class . ':detalheUser');
+    $this->put('', UserController::class . ':atualizar');
+    $this->delete('', UserController::class . ':deletar');
 });
 
-// teacher specific route
-$app->group('/teacher/{uid}', function () {
+// especifico do professor
+$app->group('/professor/{uid}', function () {
     
     // CRUD recebiveis
-    $this->group('/schoolsubject', function() {
-        $this->post('', UserController::class . ':addMateria');
-        $this->get('', UserController::class . ':allSubjects');
-        $this->get('/{id}', UserController::class . ':detailSubject');
-        $this->put('/{id}', UserController::class . ':changeSubject');
-        $this->delete('/{id}', UserController::class . ':removeSubject');
+    $this->group('/disciplina', function () {
+        $this->post('', DisciplinaController::class . ':adcMateria');
+        $this->get('', DisciplinaController::class . ':todasMaterias');
+        $this->get('/{id}', DisciplinaController::class . ':detalheMateria');
+        $this->put('/{id}', DisciplinaController::class . ':mudarMateria');
+        $this->delete('/{id}', DisciplinaController::class . ':removerMateria');
 
-        // you can put group into group to facilitate the organization
-        // the route to get here will be the sum of all the previous group + the route from within the method
-        $this->group('/grade', function() {
-            $this->post('', UserController::class . ':addGrade');
-            $this->get('', UserController::class . ':allGrades');
-            $this->get('/{id}', UserController::class . ':detailGrade');
-            $this->put('/{id}', UserController::class . ':changeGrade');
-            $this->delete('/{id}', UserController::class . ':removeGrade');
+        // pode-se colocar group dentro de group para facilitar a organizacao
+        // a route para chegar aqui vai ser a soma de todos os group anteriores + a route de dentro do method
+        $this->group('/nota', function () {
+            $this->post('', NotasController::class . ':adcNota');
+            $this->get('', NotasController::class . ':todasNotas');
+            // $this->get('/{id}', UserController::class . ':detalheNota');
+            $this->put('/{id}', NotasController::class . ':mudarNota');
+            $this->delete('/{id}', NotasController::class . ':removerNota');
         });
     });
 });
 
-// student specific route
-$app->group('/student/{uid}', function () {
+// especifico do aluno
+$app->group('/aluno/{uid}', function () {
 
-    $this->group('/schoolsubject', function() {
-        $this->post('', UserController::class . ':addSubject');
-        $this->get('', UserController::class . ':allSubject');
-        $this->get('/{id}', UserController::class . ':detailSubject');
-        $this->put('/{id}', UserController::class . ':changeSubject');
-        $this->delete('/{id}', UserController::class . ':removeSubject');
+    $this->group('/disciplina', function () {
+        // $this->post('', UserController::class . ':adcMateria');
+        $this->get('', UserController::class . ':todasMaterias');
+        $this->get('/{id}', UserController::class . ':detalheMateria');
+        // $this->put('/{id}', UserController::class . ':mudarMateria');
+        // $this->delete('/{id}', UserController::class . ':removerMateria');
     });
 
-    $this->get('/grades', UserController::class . ':grades');
+    $this->get('/notas', UserController::class . ':notas');
 });
 
-// administrator specific route
-$app->group('/admin/{uid}', function () {
-    // TODO
+// especifico para admin
+$app->group('/admin', function () {
+    $this->post('', AdminController::class . ':addAluno');
+    $this->get('/users', AdminController::class . ':todosAlunos');
+
 });
