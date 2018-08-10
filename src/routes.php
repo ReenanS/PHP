@@ -14,6 +14,9 @@ use \Controller\AdminController as AdminController;
 
 // Routes
 
+
+   // echo "Vasco";
+
 // route generica para um user (prof ou aluno)
 $app->group('/{_:user|professor|aluno}/{uid}', function () {
 
@@ -53,8 +56,8 @@ $app->group('/aluno/{uid}', function () {
 
     $this->group('/disciplina', function () {
         // $this->post('', UserController::class . ':adcMateria');
-        $this->get('', UserController::class . ':todasMaterias');
-        $this->get('/{id}', UserController::class . ':detalheMateria');
+        $this->get('', DisciplinaController::class . ':todasMaterias');
+        $this->get('/{id}', DisciplinaController::class . ':detalheMateria');
         // $this->put('/{id}', UserController::class . ':mudarMateria');
         // $this->delete('/{id}', UserController::class . ':removerMateria');
     });

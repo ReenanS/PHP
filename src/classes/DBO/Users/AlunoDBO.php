@@ -16,8 +16,12 @@ class AlunoDBO extends DBO
 
     // variaveis public são visiveis por todos
     // na acao get são exportadas como os attributos da classe
-    public $alunoid;
-    public $uid;
+    public $aluno;
+    private $alunoid;
+
+
+    public $user;
+    private $uid;
     public $nome;
     public $sobrenome;
     public $ra;
@@ -28,6 +32,9 @@ class AlunoDBO extends DBO
     {
         // chama o contrutor do pai (hierarquia - extends)
         parent::__construct($db);
+
+       // $alunoid = $aluno;
+       // $uid = $user;
 
         // set o nome da tabela no BD
         $this->setTableName("aluno");
@@ -55,6 +62,7 @@ class AlunoDBO extends DBO
         public function setAlunoID($alunoid)
         {
             $this->alunoid = $alunoid;
+            $this->aluno = $alunoid;
         }
     
         public function getUID()
@@ -64,6 +72,7 @@ class AlunoDBO extends DBO
         public function setUID($uid)
         {
             $this->uid = $uid;
+            $this->user = $uid;
         }
     
         public function getNome()

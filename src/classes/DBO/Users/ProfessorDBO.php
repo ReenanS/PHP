@@ -9,13 +9,20 @@ class ProfessorDBO extends DBO
     private $criado;
     private $modificado;
 
-    public $professorid;
-    public $uid;
+    public $professor;
+    private $professorid;
+
+    private $uid;
+    public $user;
+
     public $nome;
     public $sobrenome;
 
     public function __construct($db)
     {
+     //   $professor = $professorid;
+     //   $user = $uid;
+
         parent::__construct($db);
         $this->setTableName("professor");
         $this->setType("professor");

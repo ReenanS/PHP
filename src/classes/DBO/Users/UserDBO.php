@@ -8,8 +8,9 @@ class UserDBO extends DBO
     private $criado;
     private $userTipo;
 
-    public $uid;
-    public $tipo;
+    public $user;
+    private $uid;
+    private $tipo;
 
     public function __construct($db)
     {
@@ -44,6 +45,7 @@ class UserDBO extends DBO
 
     public function tipoId2Str($tipo)
     {
+      // return "aluno";
         return $this->userTipo[$tipo];
     }
     private function tipoStr2Id($tipo)

@@ -16,7 +16,7 @@ class DisciplinaDBO extends DBO
 
     // variaveis public são visiveis por todos
     // na acao get são exportadas como os attributos da classe
-    public $disciplinaid;
+    public $disciplina;
     public $nome;
     public $moodle;
     public $periodo;

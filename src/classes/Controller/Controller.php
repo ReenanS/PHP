@@ -54,7 +54,7 @@ abstract class Controller
         $data->setAttributes($model->get());
         $data->setId($model->getId());
 
-        foreach ($model->getRelations() as $r) {
+        /*foreach ($model->getRelations() as $r) {
             $rModel = $this->models->{$r}();
             $rModel->readByFK($model->getType(), $model->getId());
             if ($rModel->getId() == null) continue;
@@ -66,6 +66,7 @@ abstract class Controller
             $item->setAttributes($rModel->get());
             $this->view->addIncluded($item);
         }
+        */
     }
 
     protected function update($data, $fk = [])

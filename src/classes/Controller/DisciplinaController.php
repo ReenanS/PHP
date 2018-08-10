@@ -62,7 +62,7 @@ class DisciplinaController extends Controller
 
     public function detalheMateria($request, $response, $args)
     {
-        $disciplinaid = $args['disciplina'];
+        $disciplina = $args['disciplina'];
         if ($this->disciplina->readByFK('disciplina', $disciplina) == null) return $response->withStatus(403);
 
         // busca todas as tbl relacionadas com esse disciplina
@@ -80,7 +80,7 @@ class DisciplinaController extends Controller
         // Preenche a view (JSON API) para retornar um JSON apropriado
         foreach ($relations as $r) {
             $rModel = $this->models->{$r}();
-            $rModel->readByFK('curso', $this->disciplina->getId());
+            $rModel->readByFK('disciplina', $this->disciplina->getId());
             if ($rModel->getId() == null) continue;
 
             $item = $this->view->newItem();
