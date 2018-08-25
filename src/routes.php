@@ -37,6 +37,12 @@ $app->group('/professor/{uid}', function () {
             // $this->get('/{id}', UserController::class . ':detalheNota');
         });
     });
+
+    $this->group('/leciona', function() {
+        $this->post('', UserController::class . ':addProfMateria');
+        $this->put('/{lid}', UserController::class . ':editProfMateria');
+        $this->delete('/{lid}', UserController::class . ':delProfMateria');
+    });
 });
 
 // especifico do aluno
@@ -47,7 +53,30 @@ $app->group('/aluno/{uid}', function () {
         $this->get('/{id}', DisciplinaController::class . ':detalheMateriaAluno');
     });
 
+    $this->group('/matricula', function() {
+        $this->post('', UserController::class . ':addAlunoMateria');
+        $this->put('/{mid}', UserController::class . ':editAlunoMateria');
+        $this->delete('/{mid}', UserController::class . ':delAlunoMateria');
+    });
+
     $this->get('/notas', UserController::class . ':notas');
+});
+
+// especifico da disciplina
+$app->group('/disciplina/{uid}', function () {
+    
+    // CRUD recebiveis
+    $this->group('/nota', function () {
+        $this->get('', DisciplinaController::class . ':todasMaterias');
+        $this->get('/{id}', DisciplinaController::class . ':detalheMateriaProf');
+
+        // pode-se colocar group dentro de group para facilitar a organizacao
+        // a route para chegar aqui vai ser a soma de todos os group anteriores + a route de dentro do method
+        $this->group('/notas', function () {
+            $this->get('', NotasController::class . ':todasNotas');
+            // $this->get('/{id}', UserController::class . ':detalheNota');
+        });
+    });
 });
 
 // especifico para admin
