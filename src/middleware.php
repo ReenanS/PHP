@@ -6,7 +6,6 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 // e.g: $app->add(new \Slim\Csrf\Guard);
 
-
 // TODO: Add middleware user authentication
 
 // validar que o user com type admin de fato é um administrador!
@@ -18,6 +17,6 @@ $app->add(function (Request $request, Response $response, callable $next) {
 
     $response = $next($request, $response);
     return $response
-        ->withHeader('Content-Type', 'application/vnd.api+json')
+        ->withHeader('Content-Type', 'application/json')
         ->withHeader('Access-Control-Allow-Origin', '*');
 });

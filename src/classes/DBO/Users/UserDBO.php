@@ -9,7 +9,6 @@ class UserDBO extends DBO
     private $userTipo;
 
     public $user;
-    private $uid;
     private $tipo;
 
     public function __construct($db)

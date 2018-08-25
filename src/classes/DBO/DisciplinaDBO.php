@@ -24,7 +24,7 @@ class DisciplinaDBO extends DBO
     public $qtdT;
     public $kP;
     public $kT;
-    public $emenda;
+    public $ementa;
     public $curso;
 
     public function __construct($db)
@@ -47,7 +47,7 @@ class DisciplinaDBO extends DBO
 
         // tabelas que possuem relacao com essa
         // essas tbls tem uma coluna professor q é uma FK para essa tbl
-        $this->getRelations(["leciona", "pre_requisito", "matricula","nota"]);
+        $this->setRelations(["leciona", "pre_requisito", "matricula","nota"]);
     }
 
 

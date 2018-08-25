@@ -47,7 +47,4 @@ class ModelController
         return new Nota($this->db);
     }
 
-
-
-
 }

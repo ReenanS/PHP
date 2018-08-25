@@ -51,6 +51,7 @@ abstract class DBO
         $sql = "SELECT " . $this->getKeys() .
             " FROM " . $this->table_name .
             " WHERE " . $this->table_name . " = '" . $this->id . "';";
+            var_export($sql);
         $stmt = $this->db->query($sql);
         if ($row = $stmt->fetch()) {
             $this->set($row);
@@ -144,7 +145,7 @@ abstract class DBO
         $sql = "SELECT " . $fk .
             " FROM " . $this->table_name .
             " WHERE " . $this->table_name . " = " . $this->id;
-        var_export($sql);
+        //var_export($sql);
         $stmt = $this->db->query($sql);
         if ($row = $stmt->fetch()) {
             foreach ($row as $k => $v) {

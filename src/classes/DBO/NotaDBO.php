@@ -17,12 +17,12 @@ class NotaDBO extends DBO
 
     // variaveis public são visiveis por todos
     // na acao get são exportadas como os attributos da classe
-    public $notaid;
+    public $nota;
     public $valor;
-    public $matriculaid;
-    public $alunoid;
-    public $disciplinaid;
-    public $detalheid;
+    public $matricula;
+    public $aluno;
+    public $disciplina;
+    public $detalhe;
 
     public function __construct($db)
     {
@@ -43,63 +43,8 @@ class NotaDBO extends DBO
         $this->setFK(["matricula", "aluno", "disciplina", "detalhe"]);
 
         // tabelas que possuem relacao com essa
-        // essas tbls tem uma coluna professor q é uma FK para essa tbl
+        // essas tbls tem uma coluna nota q é uma FK para essa tbl
         $this->getRelations([""]);
-    }
-
-        // getter and setter
-    public function getNotaID()
-    {
-        return $this->notaid;
-    }
-    public function setNotaID($notaid)
-    {
-        $this->notaid = $notaid;
-    }
-
-    public function getValor()
-    {
-        return $this->valor;
-    }
-    public function setValor($valor)
-    {
-        $this->valor = $valor;
-    }
-
-    public function getMatriculaID()
-    {
-        return $this->matriculaid;
-    }
-    public function setMatriculaID($matriculaid)
-    {
-        $this->matriculaid = $matriculaid;
-    }
-
-    public function getAlunoID()
-    {
-        return $this->alunoid;
-    }
-    public function setAlunoID($alunoid)
-    {
-        $this->alunoid = $alunoid;
-    }
-
-    public function getDisciplinaID()
-    {
-        return $this->disciplinaid;
-    }
-    public function setDisciplinaID($disciplinaid)
-    {
-        $this->disciplinaid = $disciplinaid;
-    }
-
-    public function getDetalheID()
-    {
-        return $this->detalheid;
-    }
-    public function setDetalheID($detalheid)
-    {
-        $this->detalheid = $detalheid;
     }
 
 
