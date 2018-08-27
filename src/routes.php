@@ -13,7 +13,6 @@ use \Controller\AuthController as AuthController;
 
 // Routes
 
-
 // route generica para um user (prof ou aluno)
 $app->group('/{_:user|professor|aluno}/{uid}', function () {
 
@@ -24,7 +23,7 @@ $app->group('/{_:user|professor|aluno}/{uid}', function () {
 
 // especifico do professor
 $app->group('/professor/{uid}', function () {
-    
+
     // CRUD recebiveis
     $this->group('/disciplina', function () {
         $this->get('', DisciplinaController::class . ':todasMaterias');
@@ -38,7 +37,7 @@ $app->group('/professor/{uid}', function () {
         });
     });
 
-    $this->group('/leciona', function() {
+    $this->group('/leciona', function () {
         $this->post('', UserController::class . ':addProfMateria');
         $this->put('/{lid}', UserController::class . ':editProfMateria');
         $this->delete('/{lid}', UserController::class . ':delProfMateria');
@@ -53,7 +52,7 @@ $app->group('/aluno/{uid}', function () {
         $this->get('/{id}', DisciplinaController::class . ':detalheMateriaAluno');
     });
 
-    $this->group('/matricula', function() {
+    $this->group('/matricula', function () {
         $this->post('', UserController::class . ':addAlunoMateria');
         $this->put('/{mid}', UserController::class . ':editAlunoMateria');
         $this->delete('/{mid}', UserController::class . ':delAlunoMateria');
@@ -64,7 +63,7 @@ $app->group('/aluno/{uid}', function () {
 
 // especifico da disciplina
 $app->group('/disciplina/{uid}', function () {
-    
+
     // CRUD recebiveis
     $this->group('/nota', function () {
         $this->get('', DisciplinaController::class . ':todasMaterias');
@@ -72,7 +71,7 @@ $app->group('/disciplina/{uid}', function () {
 
         // pode-se colocar group dentro de group para facilitar a organizacao
         // a route para chegar aqui vai ser a soma de todos os group anteriores + a route de dentro do method
-        $this->group('/notas', function () {
+        $this->group('/nota', function () {
             $this->get('', NotasController::class . ':todasNotas');
             // $this->get('/{id}', UserController::class . ':detalheNota');
         });
@@ -83,12 +82,4 @@ $app->group('/disciplina/{uid}', function () {
 $app->group('/admin', function () {
     $this->get('/users', AdminController::class . ':todosAlunos');
 
-});
-
-
-//Rotas para testar JWT - FIREBASE
-   //public route for API testing
-   //get token and use the JWT token in POSTMAN or using curl
-$app->group('/token', function () {
-    $this->get('', AuthController::class . ':genJWT');
 });

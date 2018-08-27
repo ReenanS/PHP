@@ -28,7 +28,7 @@ abstract class Controller
         $this->view = new JSONAPI();
         $this->security = new Security($this->db);
         $this->user = new User($this->db);
-        //$this->disciplina = new Disciplina($this->db);
+        $this->disciplina = new Disciplina($this->db);
         //$this->nota = new Nota($this->db);
         $this->models = new ModelController($this->db);
     }
@@ -57,20 +57,6 @@ abstract class Controller
         $data->setType($model->getType());
         $data->setAttributes($model->get());
         $data->setId($model->getId());
-
-        /*foreach ($model->getRelations() as $r) {
-            $rModel = $this->models->{$r}();
-            $rModel->readByFK($model->getType(), $model->getId());
-            if ($rModel->getId() == null) continue;
-
-            $item = $this->view->newItem();
-            $item->setId($rModel->getId());
-            $item->setType($rModel->getType());
-            $data->addRelationships($item->get());
-            $item->setAttributes($rModel->get());
-            $this->view->addIncluded($item);
-        }
-        */
     }
 
     protected function update($data, $fk = [])

@@ -7,7 +7,6 @@ use \DBO\DBO;
 // Aluno é uma tabela do BD
 class AlunoDBO extends DBO
 {
-    
     // variaveis private podem ser lidas ou não,
     // mas nunca seria exportadas
     // visiveis apenas pela classe DBO
@@ -17,11 +16,7 @@ class AlunoDBO extends DBO
     // variaveis public são visiveis por todos
     // na acao get são exportadas como os attributos da classe
     public $aluno;
-    private $alunoid;
-
-
     public $user;
-    private $uid;
     public $nome;
     public $sobrenome;
     public $ra;
@@ -32,9 +27,6 @@ class AlunoDBO extends DBO
     {
         // chama o contrutor do pai (hierarquia - extends)
         parent::__construct($db);
-
-       // $alunoid = $aluno;
-       // $uid = $user;
 
         // set o nome da tabela no BD
         $this->setTableName("aluno");
@@ -53,72 +45,5 @@ class AlunoDBO extends DBO
         // essas tbls tem uma coluna professor q é uma FK para essa tbl
         $this->getRelations(["user", "matricula", "aprendizado"]);
     }
-
-        // getter and setter
-        public function getAlunoID()
-        {
-            return $this->alunoid;
-        }
-        public function setAlunoID($alunoid)
-        {
-            $this->alunoid = $alunoid;
-            $this->aluno = $alunoid;
-        }
-    
-        public function getUID()
-        {
-            return $this->uid;
-        }
-        public function setUID($uid)
-        {
-            $this->uid = $uid;
-            $this->user = $uid;
-        }
-    
-        public function getNome()
-        {
-            return $this->nome;
-        }
-        public function setNome($nome)
-        {
-            $this->nome = $nome;
-        }
-    
-        public function getSobrenome()
-        {
-            return $this->sobrenome;
-        }
-        public function setSobrenome($sobrenome)
-        {
-            $this->sobrenome = $sobrenome;
-        }
-
-        public function getRA()
-        {
-            return $this->ra;
-        }
-        public function setRA($ra)
-        {
-            $this->ra = $ra;
-        }
-    
-        public function getCurso()
-        {
-            return $this->curso;
-        }
-        public function setCurso($curso)
-        {
-            $this->curso = $curso;
-        }
-
-        public function getAnoMatricula()
-        {
-            return $this->ano_matricula;
-        }
-        public function setAnoMatricula($ano_matricula)
-        {
-            $this->ano_matricula = $ano_matricula;
-        }
-
 
 }

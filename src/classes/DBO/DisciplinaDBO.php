@@ -46,8 +46,8 @@ class DisciplinaDBO extends DBO
         $this->setFK(["curso"]);
 
         // tabelas que possuem relacao com essa
-        // essas tbls tem uma coluna professor q é uma FK para essa tbl
-        $this->setRelations(["leciona", "pre_requisito", "matricula","nota"]);
+        // essas tbls tem uma coluna disciplina q é uma FK para essa tbl
+        $this->setRelations(["leciona","pre_requisito","matricula","nota"]); 
     }
 
 

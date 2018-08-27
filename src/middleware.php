@@ -17,6 +17,6 @@ $app->add(function (Request $request, Response $response, callable $next) {
 
     $response = $next($request, $response);
     return $response
-        ->withHeader('Content-Type', 'application/json')
+        ->withHeader('Content-Type', 'application/vnd.api+json')
         ->withHeader('Access-Control-Allow-Origin', '*');
 });
