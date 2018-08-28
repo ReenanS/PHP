@@ -53,4 +53,58 @@ class UserController extends Controller
         return $response;
     }
 
+    // Aluno
+    public function addAlunoMateria($request, $response, $args) {
+        // $token = $request->getHeader('Authorization')[0];
+        // if (!$this->security->validar($token)) 
+        //     return $response->withStatus(401);
+        $disciplina = $args['uid'];
+
+        $body = $request->getParsedBody();
+        $this->view->set($body);
+        
+        $this->db->beginTransaction();
+        try {
+            foreach($this->view->getData() as $data) {
+                $model = $this->models->aluno();
+                $data = $this->view->getData();
+                $atrib = $data->getAttributes();
+                var_export($atrib);
+                var_export($disciplina);
+                $model->matricular($atrib['id'],$disciplina);
+            }
+
+            $response = $response->withStatus(201);
+            $this->db->commit();
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
+            $response = $response->withStatus(400);
+            $this->db->rollBack();
+        } 
+        
+        return $response;
+    }
+
+    // public function editAlunoMateria($request, $response, $args) {
+
+    // }
+
+    public function delAlunoMateria($request, $response, $args) {
+
+    }
+
+
+    // Professor
+    public function addProfMateria($request, $response, $args) {
+
+    }
+
+    public function editProfMateria($request, $response, $args) {
+
+    }
+
+    public function delProfMateria($request, $response, $args) {
+
+    }
+
 }

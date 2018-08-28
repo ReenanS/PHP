@@ -17,8 +17,6 @@ class AlunoDBO extends DBO
     // variaveis public são visiveis por todos
     // na acao get são exportadas como os attributos da classe
     public $aluno;
-    private $alunoid;
-
 
     public $user;
     private $uid;
@@ -54,17 +52,27 @@ class AlunoDBO extends DBO
         $this->getRelations(["user", "matricula", "aprendizado"]);
     }
 
-        // getter and setter
-        public function getAlunoID()
-        {
-            return $this->alunoid;
-        }
-        public function setAlunoID($alunoid)
-        {
-            $this->alunoid = $alunoid;
-            $this->aluno = $alunoid;
-        }
-    
+
+    public function matricular($aid,$did) {
+        $sql =  "INSERT INTO matricula(aluno,disciplina) VALUES " .
+                " (" . $aid .','. $did .');';
+        var_export($sql);
+        $stmt = $this->db->exec($sql);
+        return $this->readId();
+    }
+
+    public function desmatricular($aid,$did) {
+        $sql =  "DELETE FROM matricula " .
+                "WHERE aluno = '" . $aid."' ".
+                "AND disciplina = '" . $did ."';";
+        var_export($sql);
+        $stmt = $this->db->exec($sql);
+        return $this->readId();
+    }
+
+
+
+        // getter and setter    
         public function getUID()
         {
             return $this->uid;
