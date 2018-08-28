@@ -8,7 +8,7 @@ class AdminController extends Controller
     // Exemplo
     public function todosAlunos($request, $response, $args)
     {
-        echo("todo");
+        echo("TODO");
     }
 
 

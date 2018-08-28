@@ -23,7 +23,6 @@ class UserController extends Controller
         // busca todas as tbl relacionadas com esse user
         // no caso seria todas as tbl q possuem a fk do user
         $relations = $this->user->getRelations();
-        
 
         $this->user->setTipoByKey($tipo);
 
@@ -35,7 +34,7 @@ class UserController extends Controller
 
         // busca os dados na BD
         $this->read($model);
-
+      
         // Preenche a view (JSON API) para retornar um JSON apropriado
         foreach ($relations as $r) {
             $rModel = $this->models->{$r}();

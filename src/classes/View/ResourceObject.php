@@ -19,8 +19,8 @@ class ResourceObject
         foreach ($this as $k => $v) {
             if (isset($v)) {
                 if ($k == 'relationships') {
-                    foreach ($v as $rK => $rV) {
-                        $json[$k][$rK]['data'] = $rV['data']->get();
+                    foreach ($v['data'] as $rK => $rV) {
+                        $json[$k][] = $rV->get();
                     }
                 } else $json[$k] = $v;
             }

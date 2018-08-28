@@ -6,10 +6,9 @@ use \DBO\DBO;
 class UserDBO extends DBO
 {
     private $criado;
-    private $userTipo;
 
     public $user;
-    private $tipo;
+    public $tipo;
 
     public function __construct($db)
     {
@@ -44,7 +43,6 @@ class UserDBO extends DBO
 
     public function tipoId2Str($tipo)
     {
-      // return "aluno";
         return $this->userTipo[$tipo];
     }
     private function tipoStr2Id($tipo)

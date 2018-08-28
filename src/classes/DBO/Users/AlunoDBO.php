@@ -7,7 +7,6 @@ use \DBO\DBO;
 // Aluno é uma tabela do BD
 class AlunoDBO extends DBO
 {
-    
     // variaveis private podem ser lidas ou não,
     // mas nunca seria exportadas
     // visiveis apenas pela classe DBO
@@ -16,10 +15,8 @@ class AlunoDBO extends DBO
 
     // variaveis public são visiveis por todos
     // na acao get são exportadas como os attributos da classe
-    public $aluno;
-
+    // public $aluno;
     public $user;
-    private $uid;
     public $nome;
     public $sobrenome;
     public $ra;
@@ -30,9 +27,6 @@ class AlunoDBO extends DBO
     {
         // chama o contrutor do pai (hierarquia - extends)
         parent::__construct($db);
-
-       // $alunoid = $aluno;
-       // $uid = $user;
 
         // set o nome da tabela no BD
         $this->setTableName("aluno");
@@ -68,6 +62,29 @@ class AlunoDBO extends DBO
         var_export($sql);
         $stmt = $this->db->exec($sql);
         return $this->readId();
+    }
+
+    public function instantiateSelf()
+    {
+        return new self($this->db);
+    }
+
+    public function readAlunoMatriculados($disciplina)
+    {
+        $sql =  "SELECT matricula, " . $this->table_name . ', ' . $this->getKeys() .
+                " FROM matricula " .
+                " LEFT JOIN ". $this->table_name . " USING (". $this->table_name . ") ".
+                " WHERE disciplina = '" . $disciplina . "';";
+        var_export($sql);
+        $stmt = $this->db->query($sql);
+        $response = array();
+        while ($row = $stmt->fetch()) {
+            $object = $this->instantiateSelf();
+            $object->set($row);
+            $object->setId($row[$this->table_name]);
+            array_push($response, $object);
+        }
+        return $response;
     }
 
 
@@ -118,15 +135,5 @@ class AlunoDBO extends DBO
         {
             $this->curso = $curso;
         }
-
-        public function getAnoMatricula()
-        {
-            return $this->ano_matricula;
-        }
-        public function setAnoMatricula($ano_matricula)
-        {
-            $this->ano_matricula = $ano_matricula;
-        }
-
 
 }
