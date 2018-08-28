@@ -65,13 +65,46 @@ abstract class DBO
         $sql = "SELECT " . $this->table_name . ',' . $this->getKeys() .
             " FROM " . $this->table_name .
             " WHERE " . $k . " = '" . $v . "';";
-        //echo(var_dump($sql));
+        var_export($sql);
         $stmt = $this->db->query($sql);
         if ($row = $stmt->fetch()) {
             $this->setId($row[$this->table_name]);
             $this->set($row);
         }
         return $this->get();
+    }
+
+    public function readAll()
+    {
+        $sql = "SELECT " . $this->table_name . ', ' . $this->getKeys() .
+                " FROM " . $this->table_name . ";";
+        // var_export($sql);
+        $stmt = $this->db->query($sql);
+        $response = array();
+        while ($row = $stmt->fetch()) {
+            $object = $this->instantiateSelf();
+            $object->set($row);
+            $object->setId($row[$this->table_name]);
+            array_push($response, $object);
+        }
+        return $response;
+    }
+
+    public function readAllByFK($k, $v)
+    {
+        $sql =  "SELECT " . $this->table_name . ', ' . $this->getKeys() .
+                " FROM " . $this->table_name .
+                " WHERE " . $k . " = '" . $v . "';";
+        // var_export($sql);
+        $stmt = $this->db->query($sql);
+        $response = array();
+        while ($row = $stmt->fetch()) {
+            $object = $this->instantiateSelf();
+            $object->set($row);
+            $object->setId($row[$this->table_name]);
+            array_push($response, $object);
+        }
+        return $response;
     }
 
     // retorna a pk do ultimo elemento adcionado na tbl

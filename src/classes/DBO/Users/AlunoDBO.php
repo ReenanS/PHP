@@ -15,7 +15,7 @@ class AlunoDBO extends DBO
 
     // variaveis public são visiveis por todos
     // na acao get são exportadas como os attributos da classe
-    public $aluno;
+    // public $aluno;
     public $user;
     public $nome;
     public $sobrenome;
@@ -44,6 +44,29 @@ class AlunoDBO extends DBO
         // tabelas que possuem relacao com essa
         // essas tbls tem uma coluna professor q é uma FK para essa tbl
         $this->getRelations(["user", "matricula", "aprendizado"]);
+    }
+
+    public function instantiateSelf()
+    {
+        return new self($this->db);
+    }
+
+    public function readAlunoMatriculados($disciplina)
+    {
+        $sql =  "SELECT matricula, " . $this->table_name . ', ' . $this->getKeys() .
+                " FROM matricula " .
+                " LEFT JOIN ". $this->table_name . " USING (". $this->table_name . ") ".
+                " WHERE disciplina = '" . $disciplina . "';";
+        var_export($sql);
+        $stmt = $this->db->query($sql);
+        $response = array();
+        while ($row = $stmt->fetch()) {
+            $object = $this->instantiateSelf();
+            $object->set($row);
+            $object->setId($row[$this->table_name]);
+            array_push($response, $object);
+        }
+        return $response;
     }
 
 }

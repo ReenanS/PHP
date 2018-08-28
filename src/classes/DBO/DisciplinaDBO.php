@@ -50,5 +50,32 @@ class DisciplinaDBO extends DBO
         $this->setRelations(["leciona","pre_requisito","matricula","nota"]); 
     }
 
+    public function validarMatricula($aluno) {
+        $sql =  "SELECT matricula, aluno, disciplina " .
+                " FROM matricula" .
+                " WHERE aluno = '" . $aluno . "' " .
+                " AND disciplina = '" . $this->disciplina . "';";
+        // var_export($sql);
+        $stmt = $this->db->query($sql);
+        if ($row = $stmt->fetch()) {
+            // var_export($row['matricula']);
+            if (isset($row['matricula'])) return true;
+        }
+        return false;
+    }
+
+    public function validarDocente($professor) {
+        $sql =  "SELECT leciona, professor, disciplina " .
+                " FROM leciona" .
+                " WHERE professor = '" . $professor . "' " .
+                " AND disciplina = '" . $this->disciplina . "';";
+        // var_export($sql);
+        $stmt = $this->db->query($sql);
+        if ($row = $stmt->fetch()) {
+            // var_export($row['matricula']);
+            if (isset($row['leciona'])) return true;
+        }
+        return false;
+    }
 
 }

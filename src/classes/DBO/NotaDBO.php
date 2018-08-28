@@ -17,7 +17,7 @@ class NotaDBO extends DBO
 
     // variaveis public são visiveis por todos
     // na acao get são exportadas como os attributos da classe
-    public $nota;
+    // public $nota;
     public $valor;
     public $matricula;
     public $aluno;
@@ -40,11 +40,52 @@ class NotaDBO extends DBO
 
         // set as colunas da tbl q sao chaves estrangeiras (FK)
         // para isso o nome da tabela tem q ser igual o nome da coluna (sql naming convention)
-        $this->setFK(["matricula", "aluno", "disciplina", "detalhe"]);
+        // $this->setFK(["matricula", "aluno", "disciplina", "detalhe"]);
 
         // tabelas que possuem relacao com essa
         // essas tbls tem uma coluna nota q é uma FK para essa tbl
         $this->getRelations([""]);
+    }
+
+    public function getInfo() {
+        $cols = $this->get();
+        $colsDetalhe = $this->readDetalhe();
+        foreach($colsDetalhe as $k => $v) {
+            $cols[$k] = $v;
+        }
+        // var_export($cols);
+        return $cols;
+    }
+
+    public function readDetalhe() {
+        $sql =  "SELECT tipo, numero, peso " .
+                " FROM detalhe" . 
+                " WHERE detalhe = '" . $this->detalhe . "';";
+        // var_export($sql);
+        $stmt = $this->db->query($sql);
+        if ($row = $stmt->fetch()) {
+            $info = array(
+                "tipo" => $row['tipo'],
+                "numero" => $row['numero'],
+                "peso" => $row['peso']
+            );
+        }
+        return $info;
+    }
+
+    public function readNota($a, $d)
+    {
+        $sql = "SELECT " . $this->table_name . ',' . $this->getKeys() .
+            " FROM " . $this->table_name .
+            " WHERE aluno = '" . $a . "' ".
+            " AND disciplina = '". $d ."';";
+        // var_export($sql);
+        $stmt = $this->db->query($sql);
+        if ($row = $stmt->fetch()) {
+            $this->setId($row[$this->table_name]);
+            $this->set($row);
+        }
+        return $this->get();
     }
 
 
