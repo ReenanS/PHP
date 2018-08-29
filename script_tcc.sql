@@ -8,22 +8,22 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema nan
+-- Schema ebloom
 -- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `nan` ;
+DROP SCHEMA IF EXISTS `ebloom` ;
 
 -- -----------------------------------------------------
--- Schema nan
+-- Schema ebloom
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `nan` DEFAULT CHARACTER SET utf8 ;
-USE `nan` ;
+CREATE SCHEMA IF NOT EXISTS `ebloom` DEFAULT CHARACTER SET utf8 ;
+USE `ebloom` ;
 
 -- -----------------------------------------------------
--- Table `nan`.`user`
+-- Table `ebloom`.`user`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `nan`.`user` ;
+DROP TABLE IF EXISTS `ebloom`.`user` ;
 
-CREATE TABLE IF NOT EXISTS `nan`.`user` (
+CREATE TABLE IF NOT EXISTS `ebloom`.`user` (
   `user` INT NOT NULL,
   `email` VARCHAR(45) NOT NULL,
   `pwd` VARCHAR(45) NOT NULL,
@@ -34,11 +34,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `nan`.`aluno`
+-- Table `ebloom`.`aluno`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `nan`.`aluno` ;
+DROP TABLE IF EXISTS `ebloom`.`aluno` ;
 
-CREATE TABLE IF NOT EXISTS `nan`.`aluno` (
+CREATE TABLE IF NOT EXISTS `ebloom`.`aluno` (
   `aluno` INT NOT NULL,
   `user` INT NOT NULL,
   `nome` VARCHAR(45) NULL,
@@ -52,18 +52,18 @@ CREATE TABLE IF NOT EXISTS `nan`.`aluno` (
   INDEX `fk_aluno_user1_idx` (`user` ASC),
   CONSTRAINT `fk_aluno_user1`
     FOREIGN KEY (`user`)
-    REFERENCES `nan`.`user` (`user`)
+    REFERENCES `ebloom`.`user` (`user`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `nan`.`professor`
+-- Table `ebloom`.`professor`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `nan`.`professor` ;
+DROP TABLE IF EXISTS `ebloom`.`professor` ;
 
-CREATE TABLE IF NOT EXISTS `nan`.`professor` (
+CREATE TABLE IF NOT EXISTS `ebloom`.`professor` (
   `professor` INT NOT NULL,
   `user` INT NOT NULL,
   `nome` VARCHAR(45) NULL,
@@ -74,18 +74,18 @@ CREATE TABLE IF NOT EXISTS `nan`.`professor` (
   INDEX `fk_professor_user1_idx` (`user` ASC),
   CONSTRAINT `fk_professor_user1`
     FOREIGN KEY (`user`)
-    REFERENCES `nan`.`user` (`user`)
+    REFERENCES `ebloom`.`user` (`user`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `nan`.`curso`
+-- Table `ebloom`.`curso`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `nan`.`curso` ;
+DROP TABLE IF EXISTS `ebloom`.`curso` ;
 
-CREATE TABLE IF NOT EXISTS `nan`.`curso` (
+CREATE TABLE IF NOT EXISTS `ebloom`.`curso` (
   `curso` INT NOT NULL COMMENT 'coordenador do curso',
   `nome` VARCHAR(45) NULL,
   `periodo` INT NULL,
@@ -95,18 +95,18 @@ CREATE TABLE IF NOT EXISTS `nan`.`curso` (
   INDEX `fk_curso_professor1_idx` (`professor` ASC),
   CONSTRAINT `fk_curso_professor1`
     FOREIGN KEY (`professor`)
-    REFERENCES `nan`.`professor` (`professor`)
+    REFERENCES `ebloom`.`professor` (`professor`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `nan`.`disciplina`
+-- Table `ebloom`.`disciplina`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `nan`.`disciplina` ;
+DROP TABLE IF EXISTS `ebloom`.`disciplina` ;
 
-CREATE TABLE IF NOT EXISTS `nan`.`disciplina` (
+CREATE TABLE IF NOT EXISTS `ebloom`.`disciplina` (
   `disciplina` INT NOT NULL,
   `nome` VARCHAR(45) NULL,
   `moodle` VARCHAR(45) NULL,
@@ -123,18 +123,18 @@ CREATE TABLE IF NOT EXISTS `nan`.`disciplina` (
   INDEX `fk_disciplina_curso1_idx` (`curso` ASC),
   CONSTRAINT `fk_disciplina_curso1`
     FOREIGN KEY (`curso`)
-    REFERENCES `nan`.`curso` (`curso`)
+    REFERENCES `ebloom`.`curso` (`curso`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `nan`.`leciona`
+-- Table `ebloom`.`leciona`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `nan`.`leciona` ;
+DROP TABLE IF EXISTS `ebloom`.`leciona` ;
 
-CREATE TABLE IF NOT EXISTS `nan`.`leciona` (
+CREATE TABLE IF NOT EXISTS `ebloom`.`leciona` (
   `disciplina` INT NOT NULL,
   `professor` INT NOT NULL,
   `notificado` TINYINT NULL,
@@ -145,23 +145,23 @@ CREATE TABLE IF NOT EXISTS `nan`.`leciona` (
   INDEX `fk_leciona_disciplina1_idx` (`disciplina` ASC),
   CONSTRAINT `fk_leciona_professor1`
     FOREIGN KEY (`professor`)
-    REFERENCES `nan`.`professor` (`professor`)
+    REFERENCES `ebloom`.`professor` (`professor`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_leciona_disciplina1`
     FOREIGN KEY (`disciplina`)
-    REFERENCES `nan`.`disciplina` (`disciplina`)
+    REFERENCES `ebloom`.`disciplina` (`disciplina`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `nan`.`matricula`
+-- Table `ebloom`.`matricula`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `nan`.`matricula` ;
+DROP TABLE IF EXISTS `ebloom`.`matricula` ;
 
-CREATE TABLE IF NOT EXISTS `nan`.`matricula` (
+CREATE TABLE IF NOT EXISTS `ebloom`.`matricula` (
   `matricula` INT NOT NULL,
   `aluno` INT NOT NULL,
   `disciplina` INT NOT NULL,
@@ -171,23 +171,23 @@ CREATE TABLE IF NOT EXISTS `nan`.`matricula` (
   INDEX `fk_matriculado_disciplina1_idx` (`disciplina` ASC),
   CONSTRAINT `fk_matriculado_aluno1`
     FOREIGN KEY (`aluno`)
-    REFERENCES `nan`.`aluno` (`aluno`)
+    REFERENCES `ebloom`.`aluno` (`aluno`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_matriculado_disciplina1`
     FOREIGN KEY (`disciplina`)
-    REFERENCES `nan`.`disciplina` (`disciplina`)
+    REFERENCES `ebloom`.`disciplina` (`disciplina`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `nan`.`mensagem`
+-- Table `ebloom`.`mensagem`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `nan`.`mensagem` ;
+DROP TABLE IF EXISTS `ebloom`.`mensagem` ;
 
-CREATE TABLE IF NOT EXISTS `nan`.`mensagem` (
+CREATE TABLE IF NOT EXISTS `ebloom`.`mensagem` (
   `mensagem` INT NOT NULL,
   `titulo` VARCHAR(45) NULL,
   `descricao` VARCHAR(500) NULL,
@@ -199,11 +199,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `nan`.`notificacao`
+-- Table `ebloom`.`notificacao`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `nan`.`notificacao` ;
+DROP TABLE IF EXISTS `ebloom`.`notificacao` ;
 
-CREATE TABLE IF NOT EXISTS `nan`.`notificacao` (
+CREATE TABLE IF NOT EXISTS `ebloom`.`notificacao` (
   `notificacao` INT NOT NULL COMMENT 'fk -> mensagem',
   `user` INT NOT NULL,
   `lida` TINYINT NOT NULL,
@@ -213,23 +213,23 @@ CREATE TABLE IF NOT EXISTS `nan`.`notificacao` (
   INDEX `fk_notificacao_mensagem1_idx` (`notificacao` ASC),
   CONSTRAINT `fk_notificacao_user1`
     FOREIGN KEY (`user`)
-    REFERENCES `nan`.`user` (`user`)
+    REFERENCES `ebloom`.`user` (`user`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_notificacao_mensagem1`
     FOREIGN KEY (`notificacao`)
-    REFERENCES `nan`.`mensagem` (`mensagem`)
+    REFERENCES `ebloom`.`mensagem` (`mensagem`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `nan`.`conhecimento`
+-- Table `ebloom`.`conhecimento`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `nan`.`conhecimento` ;
+DROP TABLE IF EXISTS `ebloom`.`conhecimento` ;
 
-CREATE TABLE IF NOT EXISTS `nan`.`conhecimento` (
+CREATE TABLE IF NOT EXISTS `ebloom`.`conhecimento` (
   `conhecimento` INT NOT NULL,
   `descricao` VARCHAR(45) NULL,
   `dificuldade` INT NULL,
@@ -238,11 +238,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `nan`.`pre_requisito`
+-- Table `ebloom`.`pre_requisito`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `nan`.`pre_requisito` ;
+DROP TABLE IF EXISTS `ebloom`.`pre_requisito` ;
 
-CREATE TABLE IF NOT EXISTS `nan`.`pre_requisito` (
+CREATE TABLE IF NOT EXISTS `ebloom`.`pre_requisito` (
   `conhecimento` INT NOT NULL,
   `disciplina` INT NOT NULL,
   `importancia` INT NULL,
@@ -251,23 +251,23 @@ CREATE TABLE IF NOT EXISTS `nan`.`pre_requisito` (
   INDEX `fk_pre_requisito_disciplina1_idx` (`disciplina` ASC),
   CONSTRAINT `fk_pre_requisito_conhecimento1`
     FOREIGN KEY (`conhecimento`)
-    REFERENCES `nan`.`conhecimento` (`conhecimento`)
+    REFERENCES `ebloom`.`conhecimento` (`conhecimento`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_pre_requisito_disciplina1`
     FOREIGN KEY (`disciplina`)
-    REFERENCES `nan`.`disciplina` (`disciplina`)
+    REFERENCES `ebloom`.`disciplina` (`disciplina`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `nan`.`aprendizado`
+-- Table `ebloom`.`aprendizado`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `nan`.`aprendizado` ;
+DROP TABLE IF EXISTS `ebloom`.`aprendizado` ;
 
-CREATE TABLE IF NOT EXISTS `nan`.`aprendizado` (
+CREATE TABLE IF NOT EXISTS `ebloom`.`aprendizado` (
   `aluno` INT NOT NULL,
   `conhecimento` INT NOT NULL,
   `nivel` INT NULL,
@@ -275,23 +275,23 @@ CREATE TABLE IF NOT EXISTS `nan`.`aprendizado` (
   INDEX `fk_aprendizado_conhecimento1_idx` (`conhecimento` ASC),
   CONSTRAINT `fk_aprendizado_aluno1`
     FOREIGN KEY (`aluno`)
-    REFERENCES `nan`.`aluno` (`aluno`)
+    REFERENCES `ebloom`.`aluno` (`aluno`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_aprendizado_conhecimento1`
     FOREIGN KEY (`conhecimento`)
-    REFERENCES `nan`.`conhecimento` (`conhecimento`)
+    REFERENCES `ebloom`.`conhecimento` (`conhecimento`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `nan`.`detalhe`
+-- Table `ebloom`.`detalhe`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `nan`.`detalhe` ;
+DROP TABLE IF EXISTS `ebloom`.`detalhe` ;
 
-CREATE TABLE IF NOT EXISTS `nan`.`detalhe` (
+CREATE TABLE IF NOT EXISTS `ebloom`.`detalhe` (
   `detalhe` INT NOT NULL,
   `disciplina` INT NOT NULL,
   `tipo` ENUM('T', 'P', 'S') NULL,
@@ -301,18 +301,18 @@ CREATE TABLE IF NOT EXISTS `nan`.`detalhe` (
   INDEX `fk_detalhe_disciplina1_idx` (`disciplina` ASC),
   CONSTRAINT `fk_detalhe_disciplina1`
     FOREIGN KEY (`disciplina`)
-    REFERENCES `nan`.`disciplina` (`disciplina`)
+    REFERENCES `ebloom`.`disciplina` (`disciplina`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `nan`.`nota`
+-- Table `ebloom`.`nota`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `nan`.`nota` ;
+DROP TABLE IF EXISTS `ebloom`.`nota` ;
 
-CREATE TABLE IF NOT EXISTS `nan`.`nota` (
+CREATE TABLE IF NOT EXISTS `ebloom`.`nota` (
   `nota` INT NOT NULL,
   `valor` FLOAT NOT NULL,
   `criado` DATETIME NOT NULL,
@@ -327,12 +327,12 @@ CREATE TABLE IF NOT EXISTS `nan`.`nota` (
   INDEX `fk_nota_detalhe1_idx` (`detalhe` ASC),
   CONSTRAINT `fk_nota_matricula1`
     FOREIGN KEY (`matricula` , `aluno` , `disciplina`)
-    REFERENCES `nan`.`matricula` (`matricula` , `aluno` , `disciplina`)
+    REFERENCES `ebloom`.`matricula` (`matricula` , `aluno` , `disciplina`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_nota_detalhe1`
     FOREIGN KEY (`detalhe`)
-    REFERENCES `nan`.`detalhe` (`detalhe`)
+    REFERENCES `ebloom`.`detalhe` (`detalhe`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -343,170 +343,170 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 -- -----------------------------------------------------
--- Data for table `nan`.`user`
+-- Data for table `ebloom`.`user`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `nan`;
-INSERT INTO `nan`.`user` (`user`, `email`, `pwd`, `criado`, `tipo`) VALUES (1, 'renan@gmail.com', '123', '1000-01-01 00:00:00', 'aluno');
-INSERT INTO `nan`.`user` (`user`, `email`, `pwd`, `criado`, `tipo`) VALUES (2, 'nat@gmail.com', '123', '9999-12-31 23:59:59', 'professor');
-INSERT INTO `nan`.`user` (`user`, `email`, `pwd`, `criado`, `tipo`) VALUES (3, 'gos@gmail.com', '123', '6666-12-31 22:59:59', 'admin');
+USE `ebloom`;
+INSERT INTO `ebloom`.`user` (`user`, `email`, `pwd`, `criado`, `tipo`) VALUES (1, 'reebloom@gmail.com', '123', '1000-01-01 00:00:00', 'aluno');
+INSERT INTO `ebloom`.`user` (`user`, `email`, `pwd`, `criado`, `tipo`) VALUES (2, 'nat@gmail.com', '123', '9999-12-31 23:59:59', 'professor');
+INSERT INTO `ebloom`.`user` (`user`, `email`, `pwd`, `criado`, `tipo`) VALUES (3, 'gos@gmail.com', '123', '6666-12-31 22:59:59', 'admin');
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `nan`.`aluno`
+-- Data for table `ebloom`.`aluno`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `nan`;
-INSERT INTO `nan`.`aluno` (`aluno`, `user`, `nome`, `sobrenome`, `ra`, `curso`, `ano_matricula`, `criado`, `modificado`) VALUES (1, 1, 'Renan', 'Souza Silva', '13.00563-4', 'Computacao', '2013', '1000-01-01 00:00:00', '9999-12-31 23:59:59');
-INSERT INTO `nan`.`aluno` (`aluno`, `user`, `nome`, `sobrenome`, `ra`, `curso`, `ano_matricula`, `criado`, `modificado`) VALUES (2, 2, 'Natalia', 'Ferraz Ribeiro', '13.00234-1', 'Computacao', '2013', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
-INSERT INTO `nan`.`aluno` (`aluno`, `user`, `nome`, `sobrenome`, `ra`, `curso`, `ano_matricula`, `criado`, `modificado`) VALUES (3, 3, 'Gostavo', 'Romano', '14.00132-1', 'Computacao', '2014', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
+USE `ebloom`;
+INSERT INTO `ebloom`.`aluno` (`aluno`, `user`, `nome`, `sobrenome`, `ra`, `curso`, `ano_matricula`, `criado`, `modificado`) VALUES (1, 1, 'Reebloom', 'Souza Silva', '13.00563-4', 'Computacao', '2013', '1000-01-01 00:00:00', '9999-12-31 23:59:59');
+INSERT INTO `ebloom`.`aluno` (`aluno`, `user`, `nome`, `sobrenome`, `ra`, `curso`, `ano_matricula`, `criado`, `modificado`) VALUES (2, 2, 'Natalia', 'Ferraz Ribeiro', '13.00234-1', 'Computacao', '2013', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
+INSERT INTO `ebloom`.`aluno` (`aluno`, `user`, `nome`, `sobrenome`, `ra`, `curso`, `ano_matricula`, `criado`, `modificado`) VALUES (3, 3, 'Gostavo', 'Romano', '14.00132-1', 'Computacao', '2014', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `nan`.`professor`
+-- Data for table `ebloom`.`professor`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `nan`;
-INSERT INTO `nan`.`professor` (`professor`, `user`, `nome`, `sobrenome`, `criado`, `modificado`) VALUES (1, 1, 'Magrinha', 'da Silva', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
-INSERT INTO `nan`.`professor` (`professor`, `user`, `nome`, `sobrenome`, `criado`, `modificado`) VALUES (2, 2, 'Ricardo', 'Balistiero', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
-INSERT INTO `nan`.`professor` (`professor`, `user`, `nome`, `sobrenome`, `criado`, `modificado`) VALUES (3, 3, 'Everson', 'Denis', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
+USE `ebloom`;
+INSERT INTO `ebloom`.`professor` (`professor`, `user`, `nome`, `sobrenome`, `criado`, `modificado`) VALUES (1, 1, 'Magrinha', 'da Silva', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
+INSERT INTO `ebloom`.`professor` (`professor`, `user`, `nome`, `sobrenome`, `criado`, `modificado`) VALUES (2, 2, 'Ricardo', 'Balistiero', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
+INSERT INTO `ebloom`.`professor` (`professor`, `user`, `nome`, `sobrenome`, `criado`, `modificado`) VALUES (3, 3, 'Everson', 'Denis', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `nan`.`curso`
+-- Data for table `ebloom`.`curso`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `nan`;
-INSERT INTO `nan`.`curso` (`curso`, `nome`, `periodo`, `qualidade`, `professor`) VALUES (1, 'Computacao', 1, 10, 1);
-INSERT INTO `nan`.`curso` (`curso`, `nome`, `periodo`, `qualidade`, `professor`) VALUES (2, 'Alimentos', 1, 5, 2);
-INSERT INTO `nan`.`curso` (`curso`, `nome`, `periodo`, `qualidade`, `professor`) VALUES (3, 'Quimica', 2, 7, 3);
+USE `ebloom`;
+INSERT INTO `ebloom`.`curso` (`curso`, `nome`, `periodo`, `qualidade`, `professor`) VALUES (1, 'Computacao', 1, 10, 1);
+INSERT INTO `ebloom`.`curso` (`curso`, `nome`, `periodo`, `qualidade`, `professor`) VALUES (2, 'Alimentos', 1, 5, 2);
+INSERT INTO `ebloom`.`curso` (`curso`, `nome`, `periodo`, `qualidade`, `professor`) VALUES (3, 'Quimica', 2, 7, 3);
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `nan`.`disciplina`
+-- Data for table `ebloom`.`disciplina`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `nan`;
-INSERT INTO `nan`.`disciplina` (`disciplina`, `nome`, `moodle`, `periodo`, `qtdP`, `qtdT`, `kP`, `kT`, `criado`, `modificado`, `ementa`, `curso`) VALUES (1, 'Higiene', 'www.lalal.com', 1, 2, 0, 0,2, '9999-12-31 23:59:59', '9999-12-31 23:59:59', 'www.', 1);
-INSERT INTO `nan`.`disciplina` (`disciplina`, `nome`, `moodle`, `periodo`, `qtdP`, `qtdT`, `kP`, `kT`, `criado`, `modificado`, `ementa`, `curso`) VALUES (2, 'Economia', 'www.econ.com', 1, 4, 0, 0,1, '9999-12-31 23:59:59', '9999-12-31 23:59:59', 'www.econ.com', 1);
-INSERT INTO `nan`.`disciplina` (`disciplina`, `nome`, `moodle`, `periodo`, `qtdP`, `qtdT`, `kP`, `kT`, `criado`, `modificado`, `ementa`, `curso`) VALUES (3, 'Seguranca', 'www.everson.com', 1, 4, 4, 0,3, '9999-12-31 23:59:59', '9999-12-31 23:59:59', 'raspberry', 1);
+USE `ebloom`;
+INSERT INTO `ebloom`.`disciplina` (`disciplina`, `nome`, `moodle`, `periodo`, `qtdP`, `qtdT`, `kP`, `kT`, `criado`, `modificado`, `ementa`, `curso`) VALUES (1, 'Higiene', 'www.lalal.com', 1, 2, 0, 0,2, '9999-12-31 23:59:59', '9999-12-31 23:59:59', 'www.', 1);
+INSERT INTO `ebloom`.`disciplina` (`disciplina`, `nome`, `moodle`, `periodo`, `qtdP`, `qtdT`, `kP`, `kT`, `criado`, `modificado`, `ementa`, `curso`) VALUES (2, 'Economia', 'www.econ.com', 1, 4, 0, 0,1, '9999-12-31 23:59:59', '9999-12-31 23:59:59', 'www.econ.com', 1);
+INSERT INTO `ebloom`.`disciplina` (`disciplina`, `nome`, `moodle`, `periodo`, `qtdP`, `qtdT`, `kP`, `kT`, `criado`, `modificado`, `ementa`, `curso`) VALUES (3, 'Seguranca', 'www.everson.com', 1, 4, 4, 0,3, '9999-12-31 23:59:59', '9999-12-31 23:59:59', 'raspberry', 1);
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `nan`.`leciona`
+-- Data for table `ebloom`.`leciona`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `nan`;
-INSERT INTO `nan`.`leciona` (`disciplina`, `professor`, `notificado`, `status`, `criado`, `modificado`) VALUES (1, 1, 'S', 'DP', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
-INSERT INTO `nan`.`leciona` (`disciplina`, `professor`, `notificado`, `status`, `criado`, `modificado`) VALUES (2, 2, 'N','AP', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
-INSERT INTO `nan`.`leciona` (`disciplina`, `professor`, `notificado`, `status`, `criado`, `modificado`) VALUES (3, 3, 'S', 'SUB', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
+USE `ebloom`;
+INSERT INTO `ebloom`.`leciona` (`disciplina`, `professor`, `notificado`, `status`, `criado`, `modificado`) VALUES (1, 1, 'S', 'DP', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
+INSERT INTO `ebloom`.`leciona` (`disciplina`, `professor`, `notificado`, `status`, `criado`, `modificado`) VALUES (2, 2, 'N','AP', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
+INSERT INTO `ebloom`.`leciona` (`disciplina`, `professor`, `notificado`, `status`, `criado`, `modificado`) VALUES (3, 3, 'S', 'SUB', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `nan`.`matricula`
+-- Data for table `ebloom`.`matricula`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `nan`;
-INSERT INTO `nan`.`matricula` (`matricula`, `aluno`, `disciplina`, `criado`, `modificado`) VALUES (1, 1, 1, '9999-12-31 23:59:59', '9999-12-31 23:59:59');
-INSERT INTO `nan`.`matricula` (`matricula`, `aluno`, `disciplina`, `criado`, `modificado`) VALUES (2, 2, 2, '9999-12-31 23:59:59', '9999-12-31 23:59:59');
-INSERT INTO `nan`.`matricula` (`matricula`, `aluno`, `disciplina`, `criado`, `modificado`) VALUES (3, 3, 3, '9999-12-31 23:59:59', '9999-12-31 23:59:59');
+USE `ebloom`;
+INSERT INTO `ebloom`.`matricula` (`matricula`, `aluno`, `disciplina`, `criado`, `modificado`) VALUES (1, 1, 1, '9999-12-31 23:59:59', '9999-12-31 23:59:59');
+INSERT INTO `ebloom`.`matricula` (`matricula`, `aluno`, `disciplina`, `criado`, `modificado`) VALUES (2, 2, 2, '9999-12-31 23:59:59', '9999-12-31 23:59:59');
+INSERT INTO `ebloom`.`matricula` (`matricula`, `aluno`, `disciplina`, `criado`, `modificado`) VALUES (3, 3, 3, '9999-12-31 23:59:59', '9999-12-31 23:59:59');
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `nan`.`mensagem`
+-- Data for table `ebloom`.`mensagem`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `nan`;
-INSERT INTO `nan`.`mensagem` (`mensagem`, `titulo`, `descricao`, `importancia`, `criada`, `modificado`) VALUES (1, 'Boa Tarde', 'Saiu nota da P2', 'S', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
-INSERT INTO `nan`.`mensagem` (`mensagem`, `titulo`, `descricao`, `importancia`, `criada`, `modificado`) VALUES (2, 'Boa Noite', 'Saiu nota da P1', 'N', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
-INSERT INTO `nan`.`mensagem` (`mensagem`, `titulo`, `descricao`, `importancia`, `criada`, `modificado`) VALUES (3, 'Bom Dia', 'Saiu nota da P3', 'S', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
+USE `ebloom`;
+INSERT INTO `ebloom`.`mensagem` (`mensagem`, `titulo`, `descricao`, `importancia`, `criada`, `modificado`) VALUES (1, 'Boa Tarde', 'Saiu nota da P2', 'S', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
+INSERT INTO `ebloom`.`mensagem` (`mensagem`, `titulo`, `descricao`, `importancia`, `criada`, `modificado`) VALUES (2, 'Boa Noite', 'Saiu nota da P1', 'N', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
+INSERT INTO `ebloom`.`mensagem` (`mensagem`, `titulo`, `descricao`, `importancia`, `criada`, `modificado`) VALUES (3, 'Bom Dia', 'Saiu nota da P3', 'S', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `nan`.`notificacao`
+-- Data for table `ebloom`.`notificacao`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `nan`;
-INSERT INTO `nan`.`notificacao` (`notificacao`, `user`, `lida`, `criado`, `modificado`) VALUES (1, 1, 'N', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
-INSERT INTO `nan`.`notificacao` (`notificacao`, `user`, `lida`, `criado`, `modificado`) VALUES (2, 2, 'S', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
-INSERT INTO `nan`.`notificacao` (`notificacao`, `user`, `lida`, `criado`, `modificado`) VALUES (3, 3, 'S', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
+USE `ebloom`;
+INSERT INTO `ebloom`.`notificacao` (`notificacao`, `user`, `lida`, `criado`, `modificado`) VALUES (1, 1, 'N', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
+INSERT INTO `ebloom`.`notificacao` (`notificacao`, `user`, `lida`, `criado`, `modificado`) VALUES (2, 2, 'S', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
+INSERT INTO `ebloom`.`notificacao` (`notificacao`, `user`, `lida`, `criado`, `modificado`) VALUES (3, 3, 'S', '9999-12-31 23:59:59', '9999-12-31 23:59:59');
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `nan`.`conhecimento`
+-- Data for table `ebloom`.`conhecimento`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `nan`;
-INSERT INTO `nan`.`conhecimento` (`conhecimento`, `descricao`, `dificuldade`) VALUES (1, 'Lalal', 1);
-INSERT INTO `nan`.`conhecimento` (`conhecimento`, `descricao`, `dificuldade`) VALUES (2, 'Blabla', 2);
-INSERT INTO `nan`.`conhecimento` (`conhecimento`, `descricao`, `dificuldade`) VALUES (3, 'Oi', 3);
+USE `ebloom`;
+INSERT INTO `ebloom`.`conhecimento` (`conhecimento`, `descricao`, `dificuldade`) VALUES (1, 'Lalal', 1);
+INSERT INTO `ebloom`.`conhecimento` (`conhecimento`, `descricao`, `dificuldade`) VALUES (2, 'Blabla', 2);
+INSERT INTO `ebloom`.`conhecimento` (`conhecimento`, `descricao`, `dificuldade`) VALUES (3, 'Oi', 3);
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `nan`.`pre_requisito`
+-- Data for table `ebloom`.`pre_requisito`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `nan`;
-INSERT INTO `nan`.`pre_requisito` (`conhecimento`, `disciplina`, `importancia`, `tipo`) VALUES (1, 1, 1, 'Sei la');
-INSERT INTO `nan`.`pre_requisito` (`conhecimento`, `disciplina`, `importancia`, `tipo`) VALUES (2, 2, 2, 'Oi');
-INSERT INTO `nan`.`pre_requisito` (`conhecimento`, `disciplina`, `importancia`, `tipo`) VALUES (3, 3, 3, 'Tudo bem');
+USE `ebloom`;
+INSERT INTO `ebloom`.`pre_requisito` (`conhecimento`, `disciplina`, `importancia`, `tipo`) VALUES (1, 1, 1, 'Sei la');
+INSERT INTO `ebloom`.`pre_requisito` (`conhecimento`, `disciplina`, `importancia`, `tipo`) VALUES (2, 2, 2, 'Oi');
+INSERT INTO `ebloom`.`pre_requisito` (`conhecimento`, `disciplina`, `importancia`, `tipo`) VALUES (3, 3, 3, 'Tudo bem');
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `nan`.`aprendizado`
+-- Data for table `ebloom`.`aprendizado`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `nan`;
-INSERT INTO `nan`.`aprendizado` (`aluno`, `conhecimento`, `nivel`) VALUES (1, 1, 1);
-INSERT INTO `nan`.`aprendizado` (`aluno`, `conhecimento`, `nivel`) VALUES (2, 2, 2);
-INSERT INTO `nan`.`aprendizado` (`aluno`, `conhecimento`, `nivel`) VALUES (3, 3, 3);
+USE `ebloom`;
+INSERT INTO `ebloom`.`aprendizado` (`aluno`, `conhecimento`, `nivel`) VALUES (1, 1, 1);
+INSERT INTO `ebloom`.`aprendizado` (`aluno`, `conhecimento`, `nivel`) VALUES (2, 2, 2);
+INSERT INTO `ebloom`.`aprendizado` (`aluno`, `conhecimento`, `nivel`) VALUES (3, 3, 3);
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `nan`.`detalhe`
+-- Data for table `ebloom`.`detalhe`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `nan`;
-INSERT INTO `nan`.`detalhe` (`detalhe`, `disciplina`, `tipo`, `numero`, `peso`) VALUES (1, 1, 'T', 1, 3);
-INSERT INTO `nan`.`detalhe` (`detalhe`, `disciplina`, `tipo`, `numero`, `peso`) VALUES (2, 2, 'P', 2, 1);
-INSERT INTO `nan`.`detalhe` (`detalhe`, `disciplina`, `tipo`, `numero`, `peso`) VALUES (3, 3, 'S', 1, 2);
+USE `ebloom`;
+INSERT INTO `ebloom`.`detalhe` (`detalhe`, `disciplina`, `tipo`, `numero`, `peso`) VALUES (1, 1, 'T', 1, 3);
+INSERT INTO `ebloom`.`detalhe` (`detalhe`, `disciplina`, `tipo`, `numero`, `peso`) VALUES (2, 2, 'P', 2, 1);
+INSERT INTO `ebloom`.`detalhe` (`detalhe`, `disciplina`, `tipo`, `numero`, `peso`) VALUES (3, 3, 'S', 1, 2);
 
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `nan`.`nota`
+-- Data for table `ebloom`.`nota`
 -- -----------------------------------------------------
 START TRANSACTION;
-USE `nan`;
-INSERT INTO `nan`.`nota` (`nota`, `valor`, `criado`, `modificado`, `lancado`, `matricula`, `aluno`, `disciplina`, `detalhe`) VALUES (1, 5.2, '9999-12-31 23:59:59', 'CURRENT_TIMESTAMP', 0, 1, 1, 1, 1);
-INSERT INTO `nan`.`nota` (`nota`, `valor`, `criado`, `modificado`, `lancado`, `matricula`, `aluno`, `disciplina`, `detalhe`) VALUES (2, 7.0, '9999-12-31 23:59:59', 'CURRENT_TIMESTAMP', 1, 2, 2, 2, 2);
-INSERT INTO `nan`.`nota` (`nota`, `valor`, `criado`, `modificado`, `lancado`, `matricula`, `aluno`, `disciplina`, `detalhe`) VALUES (3, 10.0, '9999-12-31 23:59:59', 'CURRENT_TIMESTAMP', 1, 3, 3, 3, 3);
+USE `ebloom`;
+INSERT INTO `ebloom`.`nota` (`nota`, `valor`, `criado`, `modificado`, `lancado`, `matricula`, `aluno`, `disciplina`, `detalhe`) VALUES (1, 5.2, '9999-12-31 23:59:59', 'CURRENT_TIMESTAMP', 0, 1, 1, 1, 1);
+INSERT INTO `ebloom`.`nota` (`nota`, `valor`, `criado`, `modificado`, `lancado`, `matricula`, `aluno`, `disciplina`, `detalhe`) VALUES (2, 7.0, '9999-12-31 23:59:59', 'CURRENT_TIMESTAMP', 1, 2, 2, 2, 2);
+INSERT INTO `ebloom`.`nota` (`nota`, `valor`, `criado`, `modificado`, `lancado`, `matricula`, `aluno`, `disciplina`, `detalhe`) VALUES (3, 10.0, '9999-12-31 23:59:59', 'CURRENT_TIMESTAMP', 1, 3, 3, 3, 3);
 
 COMMIT;
 

@@ -24,7 +24,7 @@ class ProfessorDBO extends DBO
 
         // tabelas que possuem relacao com essa
         // essas tbls tem uma coluna professor q é uma FK para essa tbl
-        $this->getRelations(["curso", "leciona"]);
+        $this->setRelations(["curso", "leciona"]);
     }
 
 }

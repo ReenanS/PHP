@@ -5,8 +5,13 @@ namespace Controller;
 use \DBO\Users\ProfessorDBO as Professor;
 use \DBO\Users\AlunoDBO as Aluno;
 use \DBO\Users\UserDBO as User;
-use \DBO\DisciplinaDBO as Disciplina;
-use \DBO\NotaDBO as Nota;
+
+// Grade Curricular
+use \DBO\Materia\DisciplinaDBO as Disciplina;
+use \DBO\Materia\NotaDBO as Nota;
+use \DBO\Materia\MatriculaDBO as Matricula;
+use \DBO\Materia\CursoDBO as Curso;
+use \DBO\Materia\LecionaDBO as Leciona;
 
 
 class ModelController
@@ -46,5 +51,19 @@ class ModelController
     {
         return new Nota($this->db);
     }
+    
+    public function matricula()
+    {
+        return new Matricula($this->db);
+    }
 
+    public function leciona()
+    {
+        return new Leciona($this->db);
+    }
+
+    public function curso()
+    {
+        return new Curso($this->db);
+    }
 }

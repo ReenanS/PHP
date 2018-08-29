@@ -5,10 +5,10 @@ return [
         'addContentLengthHeader' => false, // Allow the web server to send the content-length header
 
         'db' => [
-            'host' => "localhost",
-            'user' => "root",
-            'pass' => "",
-            'dbname' => "nan"
+            'host' => "den1.mysql6.gear.host",
+            'user' => "ebloom",
+            'pass' => "By1379HA-e-7",
+            'dbname' => "ebloom"
         ],
 
         // Monolog settings

@@ -65,7 +65,7 @@ abstract class DBO
         $sql = "SELECT " . $this->table_name . ',' . $this->getKeys() .
             " FROM " . $this->table_name .
             " WHERE " . $k . " = '" . $v . "';";
-        var_export($sql);
+        // var_export($sql);
         $stmt = $this->db->query($sql);
         if ($row = $stmt->fetch()) {
             $this->setId($row[$this->table_name]);
@@ -164,7 +164,8 @@ abstract class DBO
             else if (isset($this->$k)) $cols[$k] = $this->$k;
         }
 
-        return $this->removeFK($cols);
+        return $cols;
+        // return $this->removeFK($cols);
     }
     public function set($info)
     {

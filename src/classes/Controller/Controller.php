@@ -6,8 +6,6 @@ use \Slim\Container as ContainerInterface;
 use \View\JSONAPI;
 use \Service\Security;
 use \DBO\Users\UserDBO as User;
-use \DBO\DisciplinaDBO as Disciplina;
-use \DBO\NotaDBO as Nota;
 use \Controller\ModelController;
 
 abstract class Controller
@@ -28,8 +26,6 @@ abstract class Controller
         $this->view = new JSONAPI();
         $this->security = new Security($this->db);
         $this->user = new User($this->db);
-        $this->disciplina = new Disciplina($this->db);
-        //$this->nota = new Nota($this->db);
         $this->models = new ModelController($this->db);
     }
 

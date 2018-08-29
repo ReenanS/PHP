@@ -43,7 +43,7 @@ class AlunoDBO extends DBO
 
         // tabelas que possuem relacao com essa
         // essas tbls tem uma coluna professor q é uma FK para essa tbl
-        $this->getRelations(["user", "matricula", "aprendizado"]);
+        $this->setRelations(["matricula", "nota"]);
     }
 
 
@@ -86,54 +86,5 @@ class AlunoDBO extends DBO
         }
         return $response;
     }
-
-
-
-        // getter and setter    
-        public function getUID()
-        {
-            return $this->uid;
-        }
-        public function setUID($uid)
-        {
-            $this->uid = $uid;
-            $this->user = $uid;
-        }
-    
-        public function getNome()
-        {
-            return $this->nome;
-        }
-        public function setNome($nome)
-        {
-            $this->nome = $nome;
-        }
-    
-        public function getSobrenome()
-        {
-            return $this->sobrenome;
-        }
-        public function setSobrenome($sobrenome)
-        {
-            $this->sobrenome = $sobrenome;
-        }
-
-        public function getRA()
-        {
-            return $this->ra;
-        }
-        public function setRA($ra)
-        {
-            $this->ra = $ra;
-        }
-    
-        public function getCurso()
-        {
-            return $this->curso;
-        }
-        public function setCurso($curso)
-        {
-            $this->curso = $curso;
-        }
 
 }
