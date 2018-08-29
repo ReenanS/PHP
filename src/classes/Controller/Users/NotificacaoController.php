@@ -1,5 +1,5 @@
 <?php
-namespace Controller;
+namespace Controller\Users;
 
 // Controllers
 use \Controller\Controller;

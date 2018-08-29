@@ -2,14 +2,13 @@
 namespace DBO\Users;
 
 use \DBO\DBO;
-use \DBO\Users\UserDBO as User;
 
 class ProfessorDBO extends DBO
 {
     private $criado;
     private $modificado;
 
-    public $professor;
+    // public $professor;
     public $user;
     public $nome;
     public $sobrenome;

@@ -2,16 +2,19 @@
 namespace Controller;
 
 // Users
-use \DBO\Users\ProfessorDBO as Professor;
 use \DBO\Users\AlunoDBO as Aluno;
+use \DBO\Users\MensagemDBO as Mensagem;
+use \DBO\Users\NotificacaoDBO as Notificacao;
+use \DBO\Users\ProfessorDBO as Professor;
 use \DBO\Users\UserDBO as User;
 
 // Grade Curricular
-use \DBO\Materia\DisciplinaDBO as Disciplina;
-use \DBO\Materia\NotaDBO as Nota;
-use \DBO\Materia\MatriculaDBO as Matricula;
-use \DBO\Materia\CursoDBO as Curso;
-use \DBO\Materia\LecionaDBO as Leciona;
+use \DBO\Business\CursoDBO as Curso;
+use \DBO\Business\DetalheDBO as Detalhe;
+use \DBO\Business\DisciplinaDBO as Disciplina;
+use \DBO\Business\LecionaDBO as Leciona;
+use \DBO\Business\MatriculaDBO as Matricula;
+use \DBO\Business\NotaDBO as Nota;
 
 
 class ModelController
@@ -27,9 +30,11 @@ class ModelController
     // chamar as classes usando:
     // $modelController->{'professor'}() ou $modelController->professor()
 
-    public function professor()
+
+    // USERS
+    public function user()
     {
-        return new Professor($this->db);
+        return new User($this->db);
     }
 
     public function aluno()
@@ -37,11 +42,27 @@ class ModelController
         return new Aluno($this->db);
     }
 
-    public function user()
+    public function professor()
     {
-        return new User($this->db);
+        return new Professor($this->db);
     }
 
+    public function mensagem()
+    {
+        return new Mensagem($this->db);
+    }
+
+    public function notificacao()
+    {
+        return new Notificacao($this->db);
+    }
+
+
+
+
+
+
+    // BUSINESS
     public function disciplina()
     {
         return new Disciplina($this->db);
@@ -65,5 +86,10 @@ class ModelController
     public function curso()
     {
         return new Curso($this->db);
+    }
+
+    public function detalhe()
+    {
+        return new Detalhe($this->db);
     }
 }

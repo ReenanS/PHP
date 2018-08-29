@@ -1,5 +1,5 @@
 <?php
-namespace DBO\Materia;
+namespace DBO\Business;
 use \DBO\DBO;
 
 class LecionaDBO extends DBO

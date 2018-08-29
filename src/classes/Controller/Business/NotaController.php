@@ -1,5 +1,5 @@
 <?php
-namespace Controller;
+namespace Controller\Business;
 
 // Controllers
 use \Controller\Controller;

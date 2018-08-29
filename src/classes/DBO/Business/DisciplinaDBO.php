@@ -1,5 +1,5 @@
 <?php
-namespace DBO\Materia;
+namespace DBO\Business;
 
 use \DBO\DBO;
 
@@ -14,9 +14,11 @@ class DisciplinaDBO extends DBO
     private $criado;
     private $modificado;
 
+    public $curso;
+
     // variaveis public são visiveis por todos
     // na acao get são exportadas como os attributos da classe
-    public $disciplina;
+    // public $disciplina;
     public $nome;
     public $moodle;
     public $periodo;
@@ -25,7 +27,6 @@ class DisciplinaDBO extends DBO
     public $kP;
     public $kT;
     public $ementa;
-    public $curso;
 
     public function __construct($db)
     {
@@ -47,9 +48,11 @@ class DisciplinaDBO extends DBO
 
         // tabelas que possuem relacao com essa
         // essas tbls tem uma coluna disciplina q é uma FK para essa tbl
-        $this->setRelations(["leciona","pre_requisito","matricula","nota"]); 
+        $this->setRelations(["leciona","matricula","nota","detalhe"]); 
     }
 
+
+    
     public function validarMatricula($aluno) {
         $sql =  "SELECT matricula, aluno, disciplina " .
                 " FROM matricula" .
