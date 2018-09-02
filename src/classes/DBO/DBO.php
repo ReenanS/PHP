@@ -4,7 +4,6 @@ namespace DBO;
 abstract class DBO
 {
     protected $db;
-
     protected $table_name;
     protected $id;
     protected $type;
@@ -33,7 +32,7 @@ abstract class DBO
     }
 
     // CRUD Operations
-
+    
     // CREATE
     public function create()
     {
@@ -52,7 +51,6 @@ abstract class DBO
         $sql = "SELECT " . $this->getKeys() .
             " FROM " . $this->table_name .
             " WHERE " . $this->table_name . " = '" . $this->id . "';";
-        //var_export($sql);
         $stmt = $this->db->query($sql);
         if ($row = $stmt->fetch()) {
             $this->set($row);
@@ -66,7 +64,6 @@ abstract class DBO
         $sql = "SELECT " . $this->table_name . ',' . $this->getKeys() .
             " FROM " . $this->table_name .
             " WHERE " . $k . " = '" . $v . "';";
-        // var_export($sql);
         $stmt = $this->db->query($sql);
         if ($row = $stmt->fetch()) {
             $this->setId($row[$this->table_name]);
@@ -78,8 +75,7 @@ abstract class DBO
     public function readAll()
     {
         $sql = "SELECT " . $this->table_name . ', ' . $this->getKeys() .
-                " FROM " . $this->table_name . ";";
-        // var_export($sql);
+            " FROM " . $this->table_name . ";";
         $stmt = $this->db->query($sql);
         $response = array();
         while ($row = $stmt->fetch()) {
@@ -93,10 +89,9 @@ abstract class DBO
 
     public function readAllByFK($k, $v)
     {
-        $sql =  "SELECT " . $this->table_name . ', ' . $this->getKeys() .
-                " FROM " . $this->table_name .
-                " WHERE " . $k . " = '" . $v . "';";
-        // var_export($sql);
+        $sql = "SELECT " . $this->table_name . ', ' . $this->getKeys() .
+            " FROM " . $this->table_name .
+            " WHERE " . $k . " = '" . $v . "';";
         $stmt = $this->db->query($sql);
         $response = array();
         while ($row = $stmt->fetch()) {
@@ -141,7 +136,6 @@ abstract class DBO
         $stmt = $this->db->exec($sql);
         return ($stmt > 0);
     }
-
     // DELETE
     public function delete()
     {
@@ -152,23 +146,21 @@ abstract class DBO
     }
 
     // Relational DB Operations
-
     // retorna todas as variaveis publicas do objeto
     public function get($sql = false)
     {
         $r = new \ReflectionClass($this);
         $props = $r->getProperties(\ReflectionProperty::IS_PUBLIC);
-
         $cols = array();
         foreach ($props as $p) {
             $k = $p->getName();
             if ($sql) $cols[$k] = $this->$k;
             else if (isset($this->$k)) $cols[$k] = $this->$k;
         }
-
         return $cols;
         // return $this->removeFK($cols);
     }
+
     public function set($info)
     {
         foreach ($info as $k => $v) {
@@ -182,7 +174,6 @@ abstract class DBO
         $sql = "SELECT " . $fk .
             " FROM " . $this->table_name .
             " WHERE " . $this->table_name . " = " . $this->id;
-        //var_export($sql);
         $stmt = $this->db->query($sql);
         if ($row = $stmt->fetch()) {
             foreach ($row as $k => $v) {
@@ -206,7 +197,7 @@ abstract class DBO
         $keys = array_keys($this->get(true));
         return implode(",", $keys);
     }
-
+    
     protected function removeFK($cols)
     {
         if ($this->fk == null) return $cols;
@@ -221,6 +212,7 @@ abstract class DBO
     {
         return $this->table_name;
     }
+
     protected function setTableName($tn)
     {
         $this->table_name = $tn;
@@ -230,6 +222,7 @@ abstract class DBO
     {
         return $this->type;
     }
+
     protected function setType($type)
     {
         $this->type = $type;
@@ -239,6 +232,7 @@ abstract class DBO
     {
         return $this->id;
     }
+
     public function setId($id)
     {
         $this->id = $id;
@@ -248,6 +242,7 @@ abstract class DBO
     {
         return $this->fk;
     }
+
     protected function setFK($fk)
     {
         $this->fk = $fk;
@@ -257,13 +252,12 @@ abstract class DBO
     {
         return $this->relations;
     }
+
     public function setRelations($relations)
     {
         $this->relations = $relations;
     }
-
     // Helper Functions 
-
     // Format data
     public function formatDate($date)
     {
@@ -280,5 +274,4 @@ abstract class DBO
         }
         return $newDate;
     }
-
 }

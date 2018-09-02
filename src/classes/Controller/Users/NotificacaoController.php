@@ -19,6 +19,40 @@ class NotificacaoController extends Controller
     {
         // TODO
         // Retorna todos os detalhes da notificacao em especifico
+        
+        /*msg*/
+        $msg = $args['nid']; //pega o id do usuario
+        $model = $this->models->notificacao();
+        
+        // cria uma classe dbo baseado no tipo do curso
+        // os {'x'} chama uma function de dentro da classe passando uma string para ela (dinamico)
+        $model->setId($msg); //setei o ID
+        
+        // busca os dados no BD
+        $model->read();
+
+       // if (!$model->validarDocente($msg)) return $response->withStatus(401);
+
+        // Monta a view
+        $data = $this->view->getData();
+        $data->setType($model->getType());
+        $data->setAttributes($model->get());
+        $data->setId($model->getId());
+
+        // Preenche a view (JSON API) para retornar um JSON apropriado
+        $r = "aluno";
+        $rModel = $this->models->{$r}();
+        $alunos = $rModel->readAlunoMatriculados($curso);
+        foreach ($alunos as $aluno) {
+            $item = $this->view->newItem();
+            $item->setId($aluno->getId());
+            $item->setType($aluno->getType());
+            $this->view->getData()->addRelationships($item->get());
+            $item->setAttributes($aluno->get());
+            $this->view->addIncluded($item);
+        }
+
+        $response = $response->withJSON($this->view->get());
         return $response;
     }
 

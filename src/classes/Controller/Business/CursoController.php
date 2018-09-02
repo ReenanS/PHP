@@ -47,11 +47,12 @@ class CursoController extends Controller
         $r = "aluno";
         $rModel = $this->models->{$r}();
         $alunos = $rModel->readAlunoMatriculados($curso);
-        // var_export($rModel);
+
         foreach ($alunos as $aluno) {
             $item = $this->view->newItem();
             $item->setId($aluno->getId());
             $item->setType($aluno->getType());
+            var_export($item);
             $this->view->getData()->addRelationships($item->get());
             $item->setAttributes($aluno->get());
             $this->view->addIncluded($item);

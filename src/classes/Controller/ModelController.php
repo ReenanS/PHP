@@ -30,7 +30,6 @@ class ModelController
     // chamar as classes usando:
     // $modelController->{'professor'}() ou $modelController->professor()
 
-
     // USERS
     public function user()
     {
@@ -57,22 +56,17 @@ class ModelController
         return new Notificacao($this->db);
     }
 
-
-
-
-
-
     // BUSINESS
     public function disciplina()
     {
         return new Disciplina($this->db);
     }
-    
+
     public function nota()
     {
         return new Nota($this->db);
     }
-    
+
     public function matricula()
     {
         return new Matricula($this->db);
