@@ -31,6 +31,7 @@ class UserController extends Controller
 
         // cria uma classe dbo baseado no tipo do user (prof ou aluno)
         // os {'x'} chama uma function de dentro da classe passando uma string para ela (dinamico)
+
         $model = $this->models->{$this->user->getTipo()}();
 
         $model->readByFK('user', $this->user->getId());
@@ -63,6 +64,33 @@ class UserController extends Controller
         // TODO
         // Cria um novo usuário na base
         // Dependendo do tipo tb cria um prof ou aluno
+
+        $id = $args['uid'];
+        $tipo = $args['_'];
+
+        $body = $request->getParsedBody();
+        $this->view->set($body);
+
+        $this->db->beginTransaction();
+        try {
+            foreach($this->view->getData() as $data) {
+                $model = $this->models->aluno();
+                $data = $this->view->getData();
+                $atrib = $data->getAttributes();
+                var_export($atrib);
+                var_export($disciplina);
+                $model->matricular($atrib['id'],$disciplina);
+            }
+
+            $response = $response->withStatus(201);
+            $this->db->commit();
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
+            $response = $response->withStatus(400);
+            $this->db->rollBack();
+        } 
+
+
         return $response;
     }
 

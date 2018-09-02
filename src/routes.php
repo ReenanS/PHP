@@ -21,10 +21,10 @@ use \Controller\Business\CursoController as CursoController;
 $app->group('/{_:user|professor|aluno}', function () {
 
     // $this->get('', UserController::class . ':getAllUser');
-    // $this->get('/{uid}', UserController::class . ':getUser');
-    // $this->post('', UserController::class . ':addUser');
-    // $this->put('/{uid}', UserController::class . ':editUser');
-    // $this->delete('/{uid}', UserController::class . ':delUser');
+    $this->get('/{uid}', UserController::class . ':getUser');
+    $this->post('', UserController::class . ':addUser');
+    $this->put('/{uid}', UserController::class . ':editUser');
+    $this->delete('/{uid}', UserController::class . ':delUser');
 
     $this->group('/{uid}/notificacao', function () {
         // $this->get('', NotificacaoController::class . ':getAllMsg');

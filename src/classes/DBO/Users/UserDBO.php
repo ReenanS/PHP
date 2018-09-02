@@ -7,8 +7,9 @@ class UserDBO extends DBO
 {
     private $criado;
 
-    public $user;
     public $tipo;
+    public $email;
+    public $pwd;
 
     public function __construct($db)
     {
@@ -21,9 +22,9 @@ class UserDBO extends DBO
         $this->setRelations(["aluno", "professor"]);
 
         $this->userTipo = array(
-            0 => 'admin',
+            0 => 'aluno',
             1 => 'professor',
-            2 => 'aluno'
+            2 => 'admin'
         );
     }
 
