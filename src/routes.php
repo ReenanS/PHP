@@ -20,8 +20,8 @@ use \Controller\Business\CursoController as CursoController;
 // route generica para um user (prof ou aluno)
 $app->group('/{_:user|professor|aluno}', function () {
 
-    // $this->get('', UserController::class . ':getAllUser');
-    // $this->get('/{uid}', UserController::class . ':getUser');
+    //$this->get('', UserController::class . ':getAllUser');
+    //$this->get('/{uid}', UserController::class . ':getUser');
     // $this->post('', UserController::class . ':addUser');
     // $this->put('/{uid}', UserController::class . ':editUser');
     // $this->delete('/{uid}', UserController::class . ':delUser');
@@ -40,8 +40,7 @@ $app->group('/professor/{pid}', function () {
 
     $this->group('/disciplina', function () {
         // $this->get('', ProfessorController::class . ':getAllLecionaDisciplina');
-        // $this->get('/{did}', ProfessorController::class . ':getLeciona');
-
+        $this->get('/{did}', ProfessorController::class . ':getLeciona');
         // $this->post('/{did}', ProfessorController::class . ':addLeciona');
         // $this->put('/{did}', ProfessorController::class . ':editLeciona');
         // $this->delete('/{did}', ProfessorController::class . ':delLeciona');
@@ -49,7 +48,6 @@ $app->group('/professor/{pid}', function () {
         $this->group('/nota', function () {
             // $this->get('', NotaController::class . ':getAllDetalheNota');
             // $this->get('/{nid}', NotaController::class . ':getDetalheNota');
-            
             // $this->post('', NotaController::class . ':addDetalheNota');
             // $this->put('/{nid}', NotaController::class . ':editDetalheNota');
             // $this->delete('/{nid}', NotaController::class . ':delDetalheNota');
@@ -57,7 +55,7 @@ $app->group('/professor/{pid}', function () {
     });
 
     $this->group('/curso', function () {
-        // $this->get('/{cid}', CursoController::class . ':getCurso');
+        $this->get('/{cid}', CursoController::class . ':getCurso');
         // $this->post('', CursoController::class . ':addCurso');
         // $this->put('/{cid}', CursoController::class . ':editCurso');
         // $this->delete('/{cid}', CursoController::class . ':delCurso');
@@ -69,7 +67,7 @@ $app->group('/aluno/{aid}', function () {
 
     $this->group('/disciplina', function () {
         // $this->get('', AlunoController::class . ':getAllMatriculaDisciplina');
-        // $this->get('/{did}', AlunoController::class . ':getMatricula');
+        $this->get('/{did}', AlunoController::class . ':getMatricula');
         // $this->post('/{did}', AlunoController::class . ':addMatricula');
         // $this->delete('/{did}', AlunoController::class . ':delMatricula');
 
@@ -83,12 +81,6 @@ $app->group('/aluno/{aid}', function () {
         });
     });
 
-    // [??]
-    // $this->group('/nota', function () {
-    //     // $this->get('', NotaController::class . ':getAllNota');
-    //     // $this->get('/{nid}', NotaController::class . ':getNota');
-    // });
-    // [??]
 });
 
 // especifico da disciplina
@@ -127,7 +119,7 @@ $app->group('/disciplina', function () {
 $app->group('/curso', function () {
 
     // $this->get('/', CursoController::class . ':getAllCurso');
-    // $this->get('/{id}', CursoController::class . ':getCurso');
+    $this->get('/{id}', CursoController::class . ':getCurso');
     // $this->post('', CursoController::class . ':addCurso');
     // $this->put('/{lid}', CursoController::class . ':editCurso');
     // $this->delete('/{lid}', CursoController::class . ':delCurso');
