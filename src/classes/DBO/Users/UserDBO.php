@@ -6,10 +6,6 @@ use \DBO\DBO;
 class UserDBO extends DBO
 {
     private $criado;
-<<<<<<< HEAD
-=======
-
->>>>>>> 16d90278a32b16283bcc892b66ef44b21e86e442
     public $tipo;
     public $email;
     public $pwd;

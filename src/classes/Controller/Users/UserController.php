@@ -17,12 +17,7 @@ class UserController extends Controller
         // TODO
         // Retorna todos os usuários, professores ou alunos
         // que estão na base, dependendo do tipo
-<<<<<<< HEAD
         
-=======
-
-                
->>>>>>> 16d90278a32b16283bcc892b66ef44b21e86e442
         // cria uma classe dbo baseado no tipo do user (prof ou aluno)
         // os {'x'} chama uma function de dentro da classe passando uma string para ela (dinamico)
         $model = $this->models->{$this->user->getTipo()}();
@@ -32,10 +27,6 @@ class UserController extends Controller
         // busca os dados na BD
         $this->read($model);
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 16d90278a32b16283bcc892b66ef44b21e86e442
         return $response;
     }
 
@@ -79,7 +70,6 @@ class UserController extends Controller
         return $response;
     }
 
-<<<<<<< HEAD
     public function addUser($request, $response, $args)
     {
         // TODO
@@ -88,22 +78,10 @@ class UserController extends Controller
         $tipo = $args['_'];
         $body = $request->getParsedBody();
         $this->view->set($body);
-=======
-    public function addUser($request, $response, $args) {
-        $tipo = $args['_'];
-
-        $body = $request->getParsedBody();
-        $this->view->set($body);
-
->>>>>>> 16d90278a32b16283bcc892b66ef44b21e86e442
         $this->db->beginTransaction();
         try {
             $data = $this->view->getData();
             $atrib = $data->getAttributes();
-<<<<<<< HEAD
-=======
-
->>>>>>> 16d90278a32b16283bcc892b66ef44b21e86e442
             $user = $this->models->user();
             $userData = array(
                 "tipo" => $tipo,
@@ -113,15 +91,10 @@ class UserController extends Controller
             $user->set($userData);
             $uid = $user->create();
             if ($uid == null) return $response->withStatus(400);
-<<<<<<< HEAD
-=======
-
->>>>>>> 16d90278a32b16283bcc892b66ef44b21e86e442
             $model = $this->models->{$tipo}();
             $atrib['user'] = $uid;
             $model->set($atrib);
             $model->create();
-<<<<<<< HEAD
             $response = $response->withStatus(201);
             $this->db->commit();
         } catch (PDOException $e) {
@@ -129,17 +102,6 @@ class UserController extends Controller
             $response = $response->withStatus(400);
             $this->db->rollBack();
         }
-=======
-
-            $response = $response->withStatus(201);
-            $this->db->commit();
-        } catch(PDOException $e) {
-            $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
-            $response = $response->withStatus(400);
-            $this->db->rollBack();
-        }
-
->>>>>>> 16d90278a32b16283bcc892b66ef44b21e86e442
         return $response;
     }
 

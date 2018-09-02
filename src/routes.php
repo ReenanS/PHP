@@ -19,19 +19,11 @@ use \Controller\Business\CursoController as CursoController;
 // route generica para um user (prof ou aluno)
 $app->group('/{_:user|professor|aluno}', function () {
 
-<<<<<<< HEAD
     //$this->get('', UserController::class . ':getAllUser');
     $this->get('/{uid}', UserController::class . ':getUser');
     // $this->post('', UserController::class . ':addUser');
     // $this->put('/{uid}', UserController::class . ':editUser');
     // $this->delete('/{uid}', UserController::class . ':delUser');
-=======
-    // $this->get('', UserController::class . ':getAllUser');
-    $this->get('/{uid}', UserController::class . ':getUser');
-    $this->post('', UserController::class . ':addUser');
-    $this->put('/{uid}', UserController::class . ':editUser');
-    $this->delete('/{uid}', UserController::class . ':delUser');
->>>>>>> 16d90278a32b16283bcc892b66ef44b21e86e442
 
     $this->group('/{uid}/notificacao', function () {
         // $this->get('', NotificacaoController::class . ':getAllMsg');
