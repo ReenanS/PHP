@@ -3,7 +3,6 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
 // Controllers
-// use \Controller\AuthController as AuthController;
 
 // Users
 use \Controller\Users\AdminController as AdminController;
@@ -14,21 +13,29 @@ use \Controller\Users\AlunoController as AlunoController;
 
 // Business
 use \Controller\Business\DisciplinaController as DisciplinaController;
-use \Controller\Business\NotasController as NotasController;
+use \Controller\Business\NotaController as NotaController;
 use \Controller\Business\CursoController as CursoController;
 
 // route generica para um user (prof ou aluno)
 $app->group('/{_:user|professor|aluno}', function () {
 
+<<<<<<< HEAD
+    //$this->get('', UserController::class . ':getAllUser');
+    $this->get('/{uid}', UserController::class . ':getUser');
+    // $this->post('', UserController::class . ':addUser');
+    // $this->put('/{uid}', UserController::class . ':editUser');
+    // $this->delete('/{uid}', UserController::class . ':delUser');
+=======
     // $this->get('', UserController::class . ':getAllUser');
     $this->get('/{uid}', UserController::class . ':getUser');
     $this->post('', UserController::class . ':addUser');
     $this->put('/{uid}', UserController::class . ':editUser');
     $this->delete('/{uid}', UserController::class . ':delUser');
+>>>>>>> 16d90278a32b16283bcc892b66ef44b21e86e442
 
     $this->group('/{uid}/notificacao', function () {
         // $this->get('', NotificacaoController::class . ':getAllMsg');
-        // $this->get('/{nid}', NotificacaoController::class . ':getMsg');
+        //$this->get('/{nid}', NotificacaoController::class . ':getMsg');
         // $this->post('', NotificacaoController::class . ':addMsg');
         // $this->put('/{nid}', NotificacaoController::class . ':editMsg');
         // $this->delete('/{nid}', NotificacaoController::class . ':delMsg');
@@ -47,7 +54,7 @@ $app->group('/professor/{pid}', function () {
 
         $this->group('/nota', function () {
             // $this->get('', NotaController::class . ':getAllDetalheNota');
-            // $this->get('/{nid}', NotaController::class . ':getDetalheNota');
+            $this->get('/{nid}', NotaController::class . ':getDetalheNota');
             // $this->post('', NotaController::class . ':addDetalheNota');
             // $this->put('/{nid}', NotaController::class . ':editDetalheNota');
             // $this->delete('/{nid}', NotaController::class . ':delDetalheNota');
@@ -73,8 +80,8 @@ $app->group('/aluno/{aid}', function () {
 
 
         $this->group('/nota', function () {
-            // $this->get('', NotaController::class . ':getAllNota');
-            // $this->get('/{nid}', NotaController::class . ':getNota');
+            $this->get('', NotaController::class . ':getAllNota');
+            $this->get('/{nid}', NotaController::class . ':getNota');
             // $this->post('', NotaController::class . ':addNota');
             // $this->put('/{nid}', NotaController::class . ':editNota');
             // $this->delete('/{nid}', NotaController::class . ':delNota');
@@ -89,13 +96,13 @@ $app->group('/disciplina', function () {
     // $this->post('', DisciplinaController::class . ':addDisciplina');
 
     $this->group('/{did}', function () {
-        // $this->get('', DisciplinaController::class . ':getDisciplina');
+        $this->get('', DisciplinaController::class . ':getDisciplina');
         // $this->put('', DisciplinaController::class . ':editDisciplina');
         // $this->delete('', DisciplinaController::class . ':delDisciplina');
         
         $this->group('/aluno', function() {
-            // $this->get('', AlunoController::class . ':getAllMatriculaAluno');
-            // $this->get('/{aid}', AlunoController::class . ':getMatricula');
+            $this->get('', AlunoController::class . ':getAllMatriculaAluno');
+            $this->get('/{aid}', AlunoController::class . ':getMatricula');
             // $this->post('/{aid}', AlunoController::class . ':addMatricula');
             // $this->delete('/{aid}', AlunoController::class . ':delMatricula');
 

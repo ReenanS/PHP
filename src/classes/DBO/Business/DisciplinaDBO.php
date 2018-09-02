@@ -16,7 +16,6 @@ class DisciplinaDBO extends DBO
 
     // variaveis public são visiveis por todos
     // na acao get são exportadas como os attributos da classe
-    public $disciplina;
     public $nome;
     public $moodle;
     public $periodo;
@@ -47,31 +46,7 @@ class DisciplinaDBO extends DBO
 
         // tabelas que possuem relacao com essa
         // essas tbls tem uma coluna disciplina q é uma FK para essa tbl
-        $this->setRelations(["leciona","matricula","nota","detalhe"]); 
-    }
-   
-    public function validarMatricula($aluno) {
-        $sql =  "SELECT matricula, aluno, disciplina " .
-                " FROM matricula" .
-                " WHERE aluno = '" . $aluno . "' " .
-                " AND disciplina = '" . $this->disciplina . "';";
-        $stmt = $this->db->query($sql);
-        if ($row = $stmt->fetch()) {
-            if (isset($row['matricula'])) return true;
-        }
-        return false;
-    }
-
-    public function validarDocente($professor) {
-        $sql =  "SELECT leciona, professor, disciplina " .
-                " FROM leciona" .
-                " WHERE professor = '" . $professor . "' " .
-                " AND disciplina = '" . $this->disciplina . "';";
-        $stmt = $this->db->query($sql);
-        if ($row = $stmt->fetch()) {
-            if (isset($row['leciona'])) return true;
-        }
-        return false;
+        $this->setRelations(["leciona", "matricula", "nota", "detalhe"]);
     }
 
 }

@@ -13,16 +13,14 @@ class NotaDBO extends DBO
     private $criado;
     private $modificado;
     
+    // variaveis public são visiveis por todos
+    // na acao get são exportadas como os attributos da classe
+    public $valor;
+    public $lancado;
     public $matricula;
     public $aluno;
     public $disciplina;
     public $detalhe;
-    
-    // variaveis public são visiveis por todos
-    // na acao get são exportadas como os attributos da classe
-    // public $nota;
-    public $valor;
-    public $lancado;
 
     public function __construct($db)
     {
@@ -31,9 +29,16 @@ class NotaDBO extends DBO
 
         // set o nome da tabela no BD
         $this->setTableName("nota");
+
+        // set o tipo da classe para ser exportado no JSON API
+        // pode ser um nome diferente da tbl para aumentar a seguranca
+        // mas nesse caso o controller nao poderia implementar as funcoes de leitura de forma generica atual
+        // obs: talvez seja interessante revisar isso
         $this->setType("nota");
+
+        // set as colunas da tbl q sao chaves estrangeiras (FK)
+        // para isso o nome da tabela tem q ser igual o nome da coluna (sql naming convention)
         $this->setFK(["matricula","aluno","disciplina","detalhe"]);
-        // $this->setRelations([""]);
     }
 
     public function getInfo() {
@@ -42,7 +47,6 @@ class NotaDBO extends DBO
         foreach($colsDetalhe as $k => $v) {
             $cols[$k] = $v;
         }
-        // var_export($cols);
         return $cols;
     }
 
@@ -50,7 +54,6 @@ class NotaDBO extends DBO
         $sql =  "SELECT tipo, numero, peso " .
                 " FROM detalhe" . 
                 " WHERE detalhe = '" . $this->detalhe . "';";
-        // var_export($sql);
         $stmt = $this->db->query($sql);
         if ($row = $stmt->fetch()) {
             $info = array(
@@ -68,7 +71,6 @@ class NotaDBO extends DBO
             " FROM " . $this->table_name .
             " WHERE aluno = '" . $a . "' ".
             " AND disciplina = '". $d ."';";
-        // var_export($sql);
         $stmt = $this->db->query($sql);
         if ($row = $stmt->fetch()) {
             $this->setId($row[$this->table_name]);

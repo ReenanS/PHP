@@ -15,7 +15,6 @@ class AlunoDBO extends DBO
 
     // variaveis public são visiveis por todos
     // na acao get são exportadas como os attributos da classe
-    // public $aluno;
     public $user;
     public $nome;
     public $sobrenome;
@@ -47,17 +46,19 @@ class AlunoDBO extends DBO
     }
 
 
-    public function matricular($aid,$did) {
-        $sql =  "INSERT INTO matricula(aluno,disciplina) VALUES " .
-                " (" . $aid .','. $did .');';
+    public function matricular($aid, $did)
+    {
+        $sql = "INSERT INTO matricula(aluno,disciplina) VALUES " .
+            " (" . $aid . ',' . $did . ');';
         $stmt = $this->db->exec($sql);
         return $this->readId();
     }
 
-    public function desmatricular($aid,$did) {
-        $sql =  "DELETE FROM matricula " .
-                "WHERE aluno = '" . $aid."' ".
-                "AND disciplina = '" . $did ."';";
+    public function desmatricular($aid, $did)
+    {
+        $sql = "DELETE FROM matricula " .
+            "WHERE aluno = '" . $aid . "' " .
+            "AND disciplina = '" . $did . "';";
         $stmt = $this->db->exec($sql);
         return $this->readId();
     }
@@ -69,11 +70,10 @@ class AlunoDBO extends DBO
 
     public function readAlunoMatriculados($disciplina)
     {
-        $sql =  "SELECT matricula, " . $this->table_name . ', ' . $this->getKeys() .
-                " FROM matricula " .
-                " LEFT JOIN ". $this->table_name . " USING (". $this->table_name . ") ".
-                " WHERE disciplina = '" . $disciplina . "';";
-        var_export($sql);
+        $sql = "SELECT matricula, " . $this->table_name . ', ' . $this->getKeys() .
+            " FROM matricula " .
+            " LEFT JOIN " . $this->table_name . " USING (" . $this->table_name . ") " .
+            " WHERE disciplina = '" . $disciplina . "';";
         $stmt = $this->db->query($sql);
         $response = array();
         while ($row = $stmt->fetch()) {

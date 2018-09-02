@@ -52,6 +52,37 @@ class DisciplinaController extends Controller
     {
         // TODO
         // Retorna todas as infos da disciplina
+
+        /*disciplina*/
+        $disciplina = $args['did']; //pega o id do usuario
+        $model = $this->models->disciplina();
+        $model->setId($disciplina); //setei o ID
+        
+        // busca os dados no BD
+        $model->read();
+
+       // if (!$model->validarDocente($disciplina)) return $response->withStatus(401);
+
+        // Monta a view
+        $data = $this->view->getData();
+        $data->setType($model->getType());
+        $data->setAttributes($model->get());
+        $data->setId($model->getId());
+
+        // Preenche a view (JSON API) para retornar um JSON apropriado
+        $r = "aluno";
+        $rModel = $this->models->{$r}();
+        $alunos = $rModel->readAlunoMatriculados($curso);
+        foreach ($alunos as $aluno) {
+            $item = $this->view->newItem();
+            $item->setId($aluno->getId());
+            $item->setType($aluno->getType());
+            $this->view->getData()->addRelationships($item->get());
+            $item->setAttributes($aluno->get());
+            $this->view->addIncluded($item);
+        }
+
+        $response = $response->withJSON($this->view->get());
         return $response;
     }
 
@@ -106,7 +137,7 @@ class DisciplinaController extends Controller
         
     }
 
-    public function detalheMateriaProf($request, $response, $args)
+    public function detalheMateriadisciplina($request, $response, $args)
     {
         
     }

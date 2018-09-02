@@ -6,7 +6,10 @@ use \DBO\DBO;
 class UserDBO extends DBO
 {
     private $criado;
+<<<<<<< HEAD
+=======
 
+>>>>>>> 16d90278a32b16283bcc892b66ef44b21e86e442
     public $tipo;
     public $email;
     public $pwd;
@@ -14,13 +17,10 @@ class UserDBO extends DBO
     public function __construct($db)
     {
 
-        // exemplo: ver classe EnderecoDBO
-
         parent::__construct($db);
         $this->setTableName("user");
         $this->setType("user");
         $this->setRelations(["aluno", "professor"]);
-
         $this->userTipo = array(
             0 => 'aluno',
             1 => 'professor',
@@ -33,10 +33,12 @@ class UserDBO extends DBO
     {
         return $this->tipoId2Str($this->tipo);
     }
+
     public function setTipoByKey($tipo)
     {
         $this->tipo = $this->tipoStr2Id($tipo);
     }
+
     public function setTipoById($tipo)
     {
         $this->tipo = $tipo;
@@ -46,6 +48,7 @@ class UserDBO extends DBO
     {
         return $this->userTipo[$tipo];
     }
+
     private function tipoStr2Id($tipo)
     {
         return array_search($tipo, $this->userTipo);
@@ -55,9 +58,9 @@ class UserDBO extends DBO
     {
         return $this->uid;
     }
+    
     public function setUID($uid)
     {
         $this->uid = $uid;
     }
-
 }

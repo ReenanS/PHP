@@ -27,7 +27,6 @@ class JSONAPI
                 $json[$k] = $v->get();
             } else {
                 foreach ($v as $ro) {
-                    // var_export($ro->get());
                     $json[$k][] = $ro->get();
                 }
             }
