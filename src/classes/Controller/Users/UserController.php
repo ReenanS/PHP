@@ -73,9 +73,6 @@ class UserController extends Controller
     }
 
     public function addUser($request, $response, $args) {
-        // TODO
-        // Cria um novo usuário na base
-        // Dependendo do tipo tb cria um prof ou aluno
         $tipo = $args['_'];
 
         $body = $request->getParsedBody();
@@ -83,8 +80,6 @@ class UserController extends Controller
 
         $this->db->beginTransaction();
         try {
-            var_export($tipo);
-
             $data = $this->view->getData();
             $atrib = $data->getAttributes();
 
@@ -96,16 +91,10 @@ class UserController extends Controller
             );
             $user->set($userData);
             $uid = $user->create();
-            var_export($uid);
             if ($uid == null) return $response->withStatus(400);
 
             $model = $this->models->{$tipo}();
-
-            var_export($atrib);
-            var_export($tipo);
-
             $atrib['user'] = $uid;
-            var_export($atrib);
             $model->set($atrib);
             $model->create();
 
@@ -115,8 +104,7 @@ class UserController extends Controller
             $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
             $response = $response->withStatus(400);
             $this->db->rollBack();
-        } 
-
+        }
 
         return $response;
     }
