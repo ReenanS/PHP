@@ -15,7 +15,10 @@ class UserController extends Controller
     public function getAllUser($request, $response, $args) 
     {
         // TODO
-        
+        // Retorna todos os usuários, professores ou alunos
+        // que estão na base, dependendo do tipo
+
+                
         // cria uma classe dbo baseado no tipo do user (prof ou aluno)
         // os {'x'} chama uma function de dentro da classe passando uma string para ela (dinamico)
         $model = $this->models->{$this->user->getTipo()}();
@@ -26,8 +29,6 @@ class UserController extends Controller
         $this->read($model);
 
 
-        // Retorna todos os usuários, professores ou alunos
-        // que estão na base, dependendo do tipo
         return $response;
     }
 
@@ -75,8 +76,6 @@ class UserController extends Controller
         // TODO
         // Cria um novo usuário na base
         // Dependendo do tipo tb cria um prof ou aluno
-
-        $id = $args['uid'];
         $tipo = $args['_'];
 
         $body = $request->getParsedBody();
@@ -84,14 +83,31 @@ class UserController extends Controller
 
         $this->db->beginTransaction();
         try {
-            foreach($this->view->getData() as $data) {
-                $model = $this->models->aluno();
-                $data = $this->view->getData();
-                $atrib = $data->getAttributes();
-                var_export($atrib);
-                var_export($disciplina);
-                $model->matricular($atrib['id'],$disciplina);
-            }
+            var_export($tipo);
+
+            $data = $this->view->getData();
+            $atrib = $data->getAttributes();
+
+            $user = $this->models->user();
+            $userData = array(
+                "tipo" => $tipo,
+                "email" => $atrib['email'],
+                "pwd" => $atrib['pwd']
+            );
+            $user->set($userData);
+            $uid = $user->create();
+            var_export($uid);
+            if ($uid == null) return $response->withStatus(400);
+
+            $model = $this->models->{$tipo}();
+
+            var_export($atrib);
+            var_export($tipo);
+
+            $atrib['user'] = $uid;
+            var_export($atrib);
+            $model->set($atrib);
+            $model->create();
 
             $response = $response->withStatus(201);
             $this->db->commit();

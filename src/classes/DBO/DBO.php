@@ -41,6 +41,7 @@ abstract class DBO
         $values = implode(",", $this->getSQL());
         $sql = "INSERT INTO " . $this->table_name .
             " (" . $keys . ") values (" . $values . ');';
+        var_export($sql);
         $stmt = $this->db->exec($sql);
         return $this->readId();
     }
