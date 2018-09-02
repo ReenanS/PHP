@@ -83,6 +83,7 @@ class UserController extends Controller
             $data = $this->view->getData();
             $atrib = $data->getAttributes();
 
+            // TODO: separar logica de criar usuarios
             $user = $this->models->user();
             $userData = array(
                 "tipo" => $tipo,
@@ -96,7 +97,8 @@ class UserController extends Controller
             $model = $this->models->{$tipo}();
             $atrib['user'] = $uid;
             $model->set($atrib);
-            $model->create();
+            $id = $model->create();
+            if ($id == null) return $response->withStatus(400);
 
             $response = $response->withStatus(201);
             $this->db->commit();
@@ -110,16 +112,67 @@ class UserController extends Controller
     }
 
     public function editUser($request, $response, $args) {
-        // TODO
-        // Altera as infos de um user já criado na base
-        // Dependendo do tipo tb altera um prof ou aluno
+        $tipo = $args['_'];
+        $user = $args['uid'];
+
+        $body = $request->getParsedBody();
+        if (!isset($body['data'])) return $response->withStatus(400);
+        $this->view->set($body);
+
+        $this->db->beginTransaction();
+        try {
+            $data = $this->view->getData();
+            $atrib = $data->getAttributes();
+
+            // TODO: separate user
+            $model = $this->models->{$tipo}();
+            if ($tipo == "user") {
+                $model->setId($user);
+            } else {
+                $model->user = $user;
+                $model->readByFK('user',$user);
+            }
+            var_export($model->getId());
+            $model->set($atrib);
+            $model->update();
+            // if ($id == null) return $response->withStatus(400);
+
+            $this->db->commit();
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
+            $response = $response->withStatus(400);
+            $this->db->rollBack();
+        }
+
         return $response;
     }
 
     public function delUser($request, $response, $args) {
-        // TODO
-        // Deleta um usuário na base
-        // Dependendo do tipo tb deleta um prof ou aluno -> (talvez seja melhor colocar isso no Banco de Dados [delete on cascade])
+        $tipo = $args['_'];
+        $user = $args['uid'];
+
+        $this->db->beginTransaction();
+        try {
+            // TODO: separate user
+            $model = $this->models->{$tipo}();
+            if ($tipo != "user") {
+                $model->user = $user;
+                $model->readByFK('user',$user);
+                var_export($model->getId());
+                $model->delete();
+                $model = $this->models->user();
+            }
+            $model->setId($user);
+            var_export($model->getId());
+            $model->delete();
+            $response = $response->withStatus(204);
+
+            $this->db->commit();
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
+            $response = $response->withStatus(400);
+            $this->db->rollBack();
+        }
         return $response;
     }
 }

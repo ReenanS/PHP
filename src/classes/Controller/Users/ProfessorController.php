@@ -62,6 +62,36 @@ class ProfessorController extends Controller
     public function addLeciona($request, $response, $args) {
         // TODO
         // Cria info que o prof leciona a disciplina
+
+        $professor = $args['pid'];
+        $disciplina = $args['did'];
+
+        // $body = $request->getParsedBody();
+        // $this->view->set($body);
+
+        $this->db->beginTransaction();
+        try {
+            // $data = $this->view->getData();
+            // $atrib = $data->getAttributes();
+
+            $model = $this->models->leciona();
+            $data = array(
+                "professor" => $professor,
+                "disciplina" => $disciplina,
+                "notificado" => 0,
+                "status" => 0
+            );
+            $model->set($data);
+            $lid = $model->create();
+            if ($lid == null) return $response->withStatus(400);
+
+            $response = $response->withStatus(201);
+            $this->db->commit();
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
+            $response = $response->withStatus(400);
+            $this->db->rollBack();
+        }
         return $response;
     }
 

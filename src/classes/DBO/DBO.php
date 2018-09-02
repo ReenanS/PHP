@@ -126,7 +126,7 @@ abstract class DBO
         $setArray = array();
         $updateCols = $this->removeFK($this->get());
         foreach ($updateCols as $k => $v) {
-            array_push($setArray, $k . " = " . $v);
+            array_push($setArray, $k . " = \"" . $v ."\"");
         }
         $set = implode(",", $setArray);
         return $this->updateSQL($set);
@@ -136,7 +136,8 @@ abstract class DBO
     {
         $sql = "UPDATE " . $this->table_name .
             " SET " . $set .
-            " WHERE " . $this->table_name . " = '" . $this->id . "';";
+            " WHERE " . $this->table_name . " = \"" . $this->id . "\";";
+        var_export($sql);
         $stmt = $this->db->exec($sql);
         return ($stmt > 0);
     }
