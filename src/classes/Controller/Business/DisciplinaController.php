@@ -15,13 +15,11 @@ class DisciplinaController extends Controller
         // TODO
         // Retorna todas as disciplinas
 
-        
         $model = $this->models->disciplina();
         
         // busca os dados no BD
         $model->read();
         $model->get();
-        echo (var_dump($model));
 
         // Monta a view
         $data = $this->view->getData();
@@ -35,7 +33,6 @@ class DisciplinaController extends Controller
         {
                 $rModel = $this->models->{$r}();
                 $rModel->readByFK('aluno', $this->user->getId());
-                //echo(var_dump($rModel));
                 if ($rModel->getId() == null) continue;
                 $item = $this->view->newItem();
                 $item->setId($rModel->getId());
@@ -43,7 +40,6 @@ class DisciplinaController extends Controller
                 $this->view->getData()->addRelationships($item->get());
                 $item->setAttributes($rModel->get());
                 $this->view->addIncluded($item);
-                //echo(var_dump($this->view->addIncluded($item)));
         }
 
         $response = $response->withJSON($this->view->get());
@@ -103,11 +99,6 @@ class DisciplinaController extends Controller
         // Deleta a disciplina daquele curso
         return $response;
     }
-
-
-
-
-
 
 
     public function detalheMateriaAluno($request, $response, $args)

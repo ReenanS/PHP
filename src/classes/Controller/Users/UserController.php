@@ -15,6 +15,17 @@ class UserController extends Controller
     public function getAllUser($request, $response, $args) 
     {
         // TODO
+        
+        // cria uma classe dbo baseado no tipo do user (prof ou aluno)
+        // os {'x'} chama uma function de dentro da classe passando uma string para ela (dinamico)
+        $model = $this->models->{$this->user->getTipo()}();
+
+        $model->readByFK('user', $this->user->getId());
+
+        // busca os dados na BD
+        $this->read($model);
+
+
         // Retorna todos os usuários, professores ou alunos
         // que estão na base, dependendo do tipo
         return $response;

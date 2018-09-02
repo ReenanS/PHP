@@ -50,7 +50,6 @@ class AlunoDBO extends DBO
     public function matricular($aid,$did) {
         $sql =  "INSERT INTO matricula(aluno,disciplina) VALUES " .
                 " (" . $aid .','. $did .');';
-        var_export($sql);
         $stmt = $this->db->exec($sql);
         return $this->readId();
     }
@@ -59,7 +58,6 @@ class AlunoDBO extends DBO
         $sql =  "DELETE FROM matricula " .
                 "WHERE aluno = '" . $aid."' ".
                 "AND disciplina = '" . $did ."';";
-        var_export($sql);
         $stmt = $this->db->exec($sql);
         return $this->readId();
     }
