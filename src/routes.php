@@ -43,8 +43,6 @@ $app->group('/professor/{pid}', function () {
     $this->group('/disciplina', function () {
         // $this->get('', ProfessorController::class . ':getAllLecionaDisciplina');
         $this->get('/{did}', ProfessorController::class . ':getLeciona');
-
-        // 2
         $this->post('/{did}', ProfessorController::class . ':addLeciona');
         $this->put('/{did}', ProfessorController::class . ':editLeciona');
         $this->delete('/{did}', ProfessorController::class . ':delLeciona');
