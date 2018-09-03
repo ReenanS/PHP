@@ -51,6 +51,8 @@ class ProfessorController extends Controller
             $item->setId($aluno->getId());
             $item->setType($aluno->getType());
             $this->view->getData()->addRelationships($item->get());
+            // $aluno->get(): não faz get em um array
+            // colocar um foreach aqui
             $item->setAttributes($aluno->get());
             $this->view->addIncluded($item);
         }
@@ -129,8 +131,6 @@ class ProfessorController extends Controller
             $model->professor = $professor;
             $model->disciplina = $disciplina;
             $model->readByFK();
-
-            var_export($model->getId());
             $model->delete();
             $response = $response->withStatus(204);
 
@@ -140,7 +140,6 @@ class ProfessorController extends Controller
             $response = $response->withStatus(400);
             $this->db->rollBack();
         }
-        return $response;
         return $response;
     }
 }

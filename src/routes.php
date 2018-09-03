@@ -21,8 +21,6 @@ $app->group('/{_:user|professor|aluno}', function () {
 
     //$this->get('', UserController::class . ':getAllUser');
     $this->get('/{uid}', UserController::class . ':getUser');
-
-    // 1
     $this->post('', UserController::class . ':addUser');
     $this->put('/{uid}', UserController::class . ':editUser');
     $this->delete('/{uid}', UserController::class . ':delUser');
@@ -74,10 +72,8 @@ $app->group('/aluno/{aid}', function () {
         // $this->get('', AlunoController::class . ':getAllMatriculaDisciplina');
         $this->get('/{did}', AlunoController::class . ':getMatricula');
 
-        // 3
-        // $this->post('/{did}', AlunoController::class . ':addMatricula');
-        // $this->delete('/{did}', AlunoController::class . ':delMatricula');
-
+        $this->post('/{did}', AlunoController::class . ':addMatricula');
+        $this->delete('/{did}', AlunoController::class . ':delMatricula');
 
         $this->group('/nota', function () {
             $this->get('', NotaController::class . ':getAllNota');

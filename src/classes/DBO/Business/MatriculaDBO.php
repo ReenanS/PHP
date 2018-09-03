@@ -39,4 +39,19 @@ class MatriculaDBO extends DBO
         $this->setRelations(["nota"]);
     }
 
+    public function readByFK($k = null, $v = null)
+    {
+        $sql = "SELECT " . $this->table_name . ',' . $this->getKeys() .
+            " FROM " . $this->table_name .
+            " WHERE aluno = '" . $this->aluno . "'".
+            " AND disciplina = '" . $this->disciplina .  "';";
+        var_export($sql);
+        $stmt = $this->db->query($sql);
+        if ($row = $stmt->fetch()) {
+            $this->setId($row[$this->table_name]);
+            $this->set($row);
+        }
+        return $this->get();
+    }
+
 }
