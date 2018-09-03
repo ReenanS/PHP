@@ -57,10 +57,9 @@ $app->group('/professor/{pid}', function () {
     $this->group('/curso', function () {
         $this->get('/{cid}', CursoController::class . ':getCurso');
 
-        // 7
-        // $this->post('', CursoController::class . ':addCurso');
-        // $this->put('/{cid}', CursoController::class . ':editCurso');
-        // $this->delete('/{cid}', CursoController::class . ':delCurso');
+        $this->post('', CursoController::class . ':addCurso');
+        $this->put('/{cid}', CursoController::class . ':editCurso');
+        $this->delete('/{cid}', CursoController::class . ':delCurso');
     });
 });
 
@@ -120,33 +119,33 @@ $app->group('/disciplina', function () {
                 // $this->get('', NotaController::class . ':getAllDetalheNota');
                 // $this->get('/{nid}', NotaController::class . ':getDetalheNota');
 
-                // 6
-                // $this->post('', NotaController::class . ':addDetalheNota');
-                // $this->put('/{nid}', NotaController::class . ':editDetalheNota');
-                // $this->delete('/{nid}', NotaController::class . ':delDetalheNota');
+                $this->post('', NotaController::class . ':addDetalheNota');
+                $this->put('/{nid}', NotaController::class . ':editDetalheNota');
+                $this->delete('/{nid}', NotaController::class . ':delDetalheNota');
             });
         });
     });
 });
 
-$app->group('/curso', function () {
 
-    // $this->get('/', CursoController::class . ':getAllCurso');
-    $this->get('/{id}', CursoController::class . ':getCurso');
+// ??? -> [NAO FAZER]
+// $app->group('/curso', function () {
 
-    // 7
-    // $this->post('', CursoController::class . ':addCurso');
-    // $this->put('/{lid}', CursoController::class . ':editCurso');
-    // $this->delete('/{lid}', CursoController::class . ':delCurso');
+//     // $this->get('/', CursoController::class . ':getAllCurso');
+//     $this->get('/{id}', CursoController::class . ':getCurso');
+// 
+//     // $this->post('', CursoController::class . ':addCurso');
+//     // $this->put('/{lid}', CursoController::class . ':editCurso');
+//     // $this->delete('/{lid}', CursoController::class . ':delCurso');
 
-    // ???
-    // $this->group('/{lid}/disciplina', function () {
-        // $this->get('', DisciplinaController::class . ':getAllCurso');
-        // $this->put('/{did}', DisciplinaController::class . ':editCurso');
-        // $this->delete('/{did}', DisciplinaController::class . ':delCurso');
-    // });
-    // ???
-});
+//     // ???
+//     // $this->group('/{lid}/disciplina', function () {
+//         // $this->get('', DisciplinaController::class . ':getAllCurso');
+//         // $this->put('/{did}', DisciplinaController::class . ':editCurso');
+//         // $this->delete('/{did}', DisciplinaController::class . ':delCurso');
+//     // });
+//     // ???
+// });
 
 
 // especifico para admin

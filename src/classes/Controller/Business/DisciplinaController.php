@@ -184,15 +184,4 @@ class DisciplinaController extends Controller
         return $response;
     }
 
-
-    public function detalheMateriaAluno($request, $response, $args)
-    {
-        
-    }
-
-    public function detalheMateriadisciplina($request, $response, $args)
-    {
-        
-    }
-
 }
