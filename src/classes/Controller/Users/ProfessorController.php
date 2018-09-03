@@ -51,8 +51,6 @@ class ProfessorController extends Controller
             $item->setId($aluno->getId());
             $item->setType($aluno->getType());
             $this->view->getData()->addRelationships($item->get());
-            // $aluno->get(): não faz get em um array
-            // colocar um foreach aqui
             $item->setAttributes($aluno->get());
             $this->view->addIncluded($item);
         }

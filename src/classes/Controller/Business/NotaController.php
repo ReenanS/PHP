@@ -31,7 +31,7 @@ class NotaController extends Controller
 
         // cria uma classe dbo baseado na nota
         // os {'x'} chama uma function de dentro da classe passando uma string para ela (dinamico)
-        $model = $this->models->nota();
+        $model = $this->models->detalhe();
         $model->setId($nota); //setei o ID
         
         // busca os dados no BD
@@ -66,22 +66,115 @@ class NotaController extends Controller
 
     public function addDetalheNota($request, $response, $args)
     {
-        // TODO
-        // Cria as infos (detalhe) sobre aquela nota
+        $professor = $args['pid'];
+        $disciplina = $args['did'];
+
+        $body = $request->getParsedBody();
+        if (!isset($body['data'])) return $response->withStatus(400);
+        $this->view->set($body);
+
+        $this->db->beginTransaction();
+        try {
+            $data = $this->view->getData();
+            $atrib = $data->getAttributes();
+        
+            // get prof leciona a disciplina
+            $model = $this->models->leciona();
+            $model->disciplina = $disciplina;
+            $model->professor = $professor;
+            $model->readByFk();
+            if ($model->getId() == null) return $response->withStatus(401);
+
+            // set fk
+            $atrib['disciplina'] = $disciplina;
+            
+            var_export($atrib);
+            $model = $this->models->detalhe();
+            $model->set($atrib);
+            $did = $model->create();
+            if ($did == null) return $response->withStatus(400);
+
+            $response = $response->withStatus(201);
+            $this->db->commit();
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
+            $response = $response->withStatus(400);
+            $this->db->rollBack();
+        }
+
         return $response;
     }
 
     public function editDetalheNota($request, $response, $args)
     {
-        // TODO
-        // Altera as infos (detalhe) sobre aquela nota
+        $professor = $args['pid'];
+        $disciplina = $args['did'];
+        $detalhe = $args['nid'];
+
+        $body = $request->getParsedBody();
+        if (!isset($body['data'])) return $response->withStatus(400);
+        $this->view->set($body);
+
+        $this->db->beginTransaction();
+        try {
+            $data = $this->view->getData();
+            $atrib = $data->getAttributes();
+
+            // get prof leciona a disciplina
+            $model = $this->models->leciona();
+            $model->disciplina = $disciplina;
+            $model->professor = $professor;
+            $model->readByFk();
+            if ($model->getId() == null) return $response->withStatus(401);
+
+            // detalhe pertence a materia
+            $model = $this->models->detalhe();
+            $model->setId($detalhe);
+            $model->read();
+            if ($model->disciplina != $disciplina) return $response->withStatus(401);
+            
+            $model->set($atrib);
+            $model->update();
+
+            $this->db->commit();
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
+            $response = $response->withStatus(400);
+            $this->db->rollBack();
+        }
         return $response;
     }
 
     public function delDetalheNota($request, $response, $args)
     {
-        // TODO
-        // Deleta as infos (detalhe) sobre aquela nota
+        $professor = $args['pid'];
+        $disciplina = $args['did'];
+        $detalhe = $args['nid'];
+
+        $this->db->beginTransaction();
+        try {
+            // get prof leciona a disciplina
+            $model = $this->models->leciona();
+            $model->disciplina = $disciplina;
+            $model->professor = $professor;
+            $model->readByFk();
+            if ($model->getId() == null) return $response->withStatus(401);
+
+            // detalhe pertence a materia
+            $model = $this->models->detalhe();
+            $model->setId($detalhe);
+            $model->read();
+            if ($model->disciplina != $disciplina) return $response->withStatus(401);
+            
+            $model->delete();
+            $response = $response->withStatus(204);
+
+            $this->db->commit();
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
+            $response = $response->withStatus(400);
+            $this->db->rollBack();
+        }
         return $response;
     }
 
