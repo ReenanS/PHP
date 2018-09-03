@@ -173,7 +173,6 @@ class DisciplinaController extends Controller
         return $response;
     }
 
-<<<<<<< HEAD
 
     public function detalheMateriaAluno($request, $response, $args)
     {
@@ -185,6 +184,4 @@ class DisciplinaController extends Controller
 
     }
 
-=======
->>>>>>> 88af8e2944d1ec850a6caf2a9cd09d176826ad25
 }

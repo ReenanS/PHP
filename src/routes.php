@@ -87,13 +87,8 @@ $app->group('/aluno/{aid}', function () {
 
 // especifico da disciplina
 $app->group('/disciplina', function () {
-<<<<<<< HEAD
     $this->get('', DisciplinaController::class . ':getAllDisciplina');
     // $this->post('', DisciplinaController::class . ':addDisciplina');
-=======
-    // $this->get('', DisciplinaController::class . ':getAllDisciplina');
-    $this->post('', DisciplinaController::class . ':addDisciplina');
->>>>>>> 88af8e2944d1ec850a6caf2a9cd09d176826ad25
 
     $this->group('/{did}', function () {
         $this->get('', DisciplinaController::class . ':getDisciplina');
@@ -133,31 +128,14 @@ $app->group('/disciplina', function () {
     });
 });
 
-
-<<<<<<< HEAD
-    $this->get('/', CursoController::class . ':getAllCurso');
-    $this->get('/{id}', CursoController::class . ':getCurso');
-    // $this->post('', CursoController::class . ':addCurso');
-    // $this->put('/{lid}', CursoController::class . ':editCurso');
-    // $this->delete('/{lid}', CursoController::class . ':delCurso');
-
-    $this->group('/{lid}/disciplina', function () {
-        // $this->get('', DisciplinaController::class . ':getAllCurso');
-        // $this->put('/{did}', CursoController::class . ':editCurso');
-        // $this->delete('/{did}', DisciplinaController::class . ':delCurso');
-    });
-});
-=======
 // ??? -> [NAO FAZER]
 // $app->group('/curso', function () {
-
 //     // $this->get('/', CursoController::class . ':getAllCurso');
 //     $this->get('/{id}', CursoController::class . ':getCurso');
 // 
 //     // $this->post('', CursoController::class . ':addCurso');
 //     // $this->put('/{lid}', CursoController::class . ':editCurso');
 //     // $this->delete('/{lid}', CursoController::class . ':delCurso');
-
 //     // ???
 //     // $this->group('/{lid}/disciplina', function () {
 //         // $this->get('', DisciplinaController::class . ':getAllCurso');
@@ -166,7 +144,6 @@ $app->group('/disciplina', function () {
 //     // });
 //     // ???
 // });
->>>>>>> 88af8e2944d1ec850a6caf2a9cd09d176826ad25
 
 
 // especifico para admin
