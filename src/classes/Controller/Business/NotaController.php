@@ -14,7 +14,7 @@ class NotaController extends Controller
     {
         // TODO
         // Retorna todas as infos (detalhe) das notas daquela disciplina
-        return $response;
+
     }
 
     public function getDetalheNota($request, $response, $args)
@@ -91,37 +91,32 @@ class NotaController extends Controller
     {
         // TODO
         // Retorna todas as notas na discilplina do aluno
-         /*aluno*/
-         $aluno = $args['aid']; //pega o id do usuario
-
-         // cria uma classe dbo baseado no tipo do disciplina
-         // os {'x'} chama uma function de dentro da classe passando uma string para ela (dinamico)
+        /*aluno*/
+        $aluno = $args['aid']; //pega o id do usuario
         $model = $this->models->aluno();
         $model->setId($aluno); //setei o ID
-         
-         // busca os dados no BD
+        
+        // busca os dados no BD
         $model->read();
- 
-         //if (!$model->validarMatricula($aluno)) return $response->withStatus(401);
- 
-         // Monta a view
+
+       // if (!$model->validarDocente($aluno)) return $response->withStatus(401);
+
+        // Monta a view
         $data = $this->view->getData();
         $data->setType($model->getType());
         $data->setAttributes($model->get());
         $data->setId($model->getId());
- 
-         // Fazer as relations pegar da tabela notas/alunos
-         // $relations = $this->disciplina->getRelations();
-         // Preenche a view (JSON API) para retornar um JSON apropriado
-        $r = "aluno";
+
+        // Preenche a view (JSON API) para retornar um JSON apropriado
+        $r = "disciplina";
         $rModel = $this->models->{$r}();
-        $rModel->readNota($aluno, $disciplina);
-        if ($rModel->getId() != null) {
+        $disciplinas = $rModel->readAll();
+        foreach ($disciplinas as $disciplina) {
             $item = $this->view->newItem();
-            $item->setId($rModel->getId());
-            $item->setType($rModel->getType());
-            $this->view->getData()->addRelationships($item->get());
-            $item->setAttributes($rModel->getInfo());
+            $item->setId($disciplina->getId());
+            $item->setType($disciplina->getType());
+            //$this->view->getData()->addRelationships($item->get());
+            $item->setAttributes($disciplina->get());
             $this->view->addIncluded($item);
         }
 
@@ -165,7 +160,7 @@ class NotaController extends Controller
             $item = $this->view->newItem();
             $item->setId($aluno->getId());
             $item->setType($aluno->getType());
-            $this->view->getData()->addRelationships($item->get());
+            //$this->view->getData()->addRelationships($item->get());
             $item->setAttributes($aluno->get());
             $this->view->addIncluded($item);
         }

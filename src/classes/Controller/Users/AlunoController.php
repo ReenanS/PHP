@@ -13,6 +13,39 @@ class AlunoController extends Controller
     {
         // TODO
         // Retorna todas as disciplinas que o aluno está matriculado
+
+        /*Aluno*/
+        $aluno = $args['aid']; //pega o id da disciplina
+
+        // cria uma classe dbo baseado no tipo do disciplina
+        // os {'x'} chama uma function de dentro da classe passando uma string para ela (dinamico)
+        $model = $this->models->aluno();
+        $model->setId($aluno); //setei o ID
+        
+        // busca os dados no BD
+        $model->read();
+
+        // Monta a view
+        $data = $this->view->getData();
+        $data->setType($model->getType());
+        $data->setAttributes($model->get());
+        $data->setId($model->getId());
+
+        // Fazer as relations pegar da tabela notas/alunos
+        // Preenche a view (JSON API) para retornar um JSON apropriado
+        $r = "disciplina";
+        $rModel = $this->models->{$r}();
+        $disciplinas = $rModel->readAll();
+        foreach ($disciplinas as $disciplina) {
+            $item = $this->view->newItem();
+            $item->setId($disciplina->getId());
+            $item->setType($disciplina->getType());
+            //$this->view->getData()->addRelationships($item->get()); //Atencao - Dava erro no get() linha 23 do resourceObject
+            $item->setAttributes($disciplina->get());
+            $this->view->addIncluded($item);
+        }
+
+        $response = $response->withJSON($this->view->get());
         return $response;
     }
 
@@ -32,10 +65,6 @@ class AlunoController extends Controller
         // busca os dados no BD
         $model->read();
 
-        //if (!$model->validarMatricula($aluno)) return $response->withStatus(401);
-
-        // $model->get();
-
         // Monta a view
         $data = $this->view->getData();
         $data->setType($model->getType());
@@ -43,17 +72,16 @@ class AlunoController extends Controller
         $data->setId($model->getId());
 
         // Fazer as relations pegar da tabela notas/alunos
-        // $relations = $this->disciplina->getRelations();
         // Preenche a view (JSON API) para retornar um JSON apropriado
         $r = "aluno";
         $rModel = $this->models->{$r}();
-        $rModel->readNota($aluno, $disciplina);
-        if ($rModel->getId() != null) {
+        $alunos = $rModel->readAll();
+        foreach ($alunos as $aluno) {
             $item = $this->view->newItem();
-            $item->setId($rModel->getId());
-            $item->setType($rModel->getType());
-            $this->view->getData()->addRelationships($item->get());
-            $item->setAttributes($rModel->getInfo());
+            $item->setId($aluno->getId());
+            $item->setType($aluno->getType());
+            //$this->view->getData()->addRelationships($item->get()); //Atencao - Dava erro no get() linha 23 do resourceObject
+            $item->setAttributes($aluno->get());
             $this->view->addIncluded($item);
         }
 

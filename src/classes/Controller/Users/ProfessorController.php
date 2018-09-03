@@ -20,42 +20,45 @@ class ProfessorController extends Controller
         // TODO
         // Retorna as infos da disciplina se o professor estiver lecionando ela
         
-        /*Prof*/
-        $prof = $args['pid']; //pega o id do usuario
+        /*Professor*/
+        $professor = $args['pid']; //pega o id do usuario
         $model = $this->models->professor();
-        
+
         /*Disciplina*/
         $disciplina = $args['did']; //pega o id da disciplina
 
         // cria uma classe dbo baseado no tipo do disciplina
         // os {'x'} chama uma function de dentro da classe passando uma string para ela (dinamico)
         $model = $this->models->disciplina();
+
         $model->setId($disciplina); //setei o ID
         
         // busca os dados no BD
         $model->read();
 
-        //if (!$model->validarDocente($prof)) return $response->withStatus(401);
-        
+        //if (!$model->validarMatricula($aluno)) return $response->withStatus(401);
+
+        // $model->get();
+
         // Monta a view
         $data = $this->view->getData();
         $data->setType($model->getType());
         $data->setAttributes($model->get());
         $data->setId($model->getId());
 
+        // Fazer as relations pegar da tabela notas/alunos
+        // $relations = $this->disciplina->getRelations();
         // Preenche a view (JSON API) para retornar um JSON apropriado
         $r = "aluno";
         $rModel = $this->models->{$r}();
-        $alunos = $rModel->readAlunoMatriculados($disciplina);
- 
+        $alunos = $rModel->readAll();
         foreach ($alunos as $aluno) {
             $item = $this->view->newItem();
             $item->setId($aluno->getId());
             $item->setType($aluno->getType());
-            $this->view->getData()->addRelationships($item->get());
+            //$this->view->getData()->addRelationships($item->get()); //Atencao - Dava erro no get() linha 23 do resourceObject
             $item->setAttributes($aluno->get());
             $this->view->addIncluded($item);
-
         }
 
         $response = $response->withJSON($this->view->get());

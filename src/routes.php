@@ -65,7 +65,7 @@ $app->group('/professor/{pid}', function () {
 $app->group('/aluno/{aid}', function () {
 
     $this->group('/disciplina', function () {
-        // $this->get('', AlunoController::class . ':getAllMatriculaDisciplina');
+        $this->get('', AlunoController::class . ':getAllMatriculaDisciplina');
         $this->get('/{did}', AlunoController::class . ':getMatricula');
         // $this->post('/{did}', AlunoController::class . ':addMatricula');
         // $this->delete('/{did}', AlunoController::class . ':delMatricula');
@@ -84,7 +84,7 @@ $app->group('/aluno/{aid}', function () {
 
 // especifico da disciplina
 $app->group('/disciplina', function () {
-    // $this->get('', DisciplinaController::class . ':getAllDisciplina');
+    $this->get('', DisciplinaController::class . ':getAllDisciplina');
     // $this->post('', DisciplinaController::class . ':addDisciplina');
 
     $this->group('/{did}', function () {
@@ -117,7 +117,7 @@ $app->group('/disciplina', function () {
 
 $app->group('/curso', function () {
 
-    // $this->get('/', CursoController::class . ':getAllCurso');
+    $this->get('/', CursoController::class . ':getAllCurso');
     $this->get('/{id}', CursoController::class . ':getCurso');
     // $this->post('', CursoController::class . ':addCurso');
     // $this->put('/{lid}', CursoController::class . ':editCurso');

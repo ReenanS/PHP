@@ -10,45 +10,34 @@ class DisciplinaController extends Controller
 {
     // DISCIPLINA
 
-    public function getAllDisciplina($request, $response, $args) 
+    public function getAllDisciplina($request, $response, $args)
     {
         // TODO
         // Retorna todas as disciplinas
 
-        $model = $this->models->disciplina();
-        
-        // busca os dados no BD
-        $model->read();
-        $model->get();
-
-        // Monta a view
-        $data = $this->view->getData();
-        $data->setType($model->getType());
-        $data->setAttributes($model->get());
-
-        // Fazer as relations pegar da tabela notas/alunos
-        $relations = $this->disciplina->getRelations();
-        // Preenche a view (JSON API) para retornar um JSON apropriado
-        foreach ($relations as $r)
-        {
-                $rModel = $this->models->{$r}();
-                $rModel->readByFK('aluno', $this->user->getId());
-                if ($rModel->getId() == null) continue;
+        try {
+            $fields = $this->models->disciplina();
+            $allDisciplina = $fields->readAll();
+            foreach ($allDisciplina as $f) {
                 $item = $this->view->newItem();
-                $item->setId($rModel->getId());
-                $item->setType($rModel->getType());
-                $this->view->getData()->addRelationships($item->get());
-                $item->setAttributes($rModel->get());
-                $this->view->addIncluded($item);
+                $item->setType($f->getType());
+                $item->setId($f->getId());
+                $item->setAttributes($f->get());
+                $this->view->addData($item);
+            }
+
+            $response = $response->withJSON($this->view->get());
+
+        } catch (PDOException $e) {
+            $this->logger->addInfo("ERRO: fields: " . $e->getMessage());
+            $response = $response->withStatus(400);
         }
 
-        $response = $response->withJSON($this->view->get());
         return $response;
 
-        return $response;
     }
 
-    public function getDisciplina($request, $response, $args) 
+    public function getDisciplina($request, $response, $args)
     {
         // TODO
         // Retorna todas as infos da disciplina
@@ -72,12 +61,12 @@ class DisciplinaController extends Controller
         // Preenche a view (JSON API) para retornar um JSON apropriado
         $r = "aluno";
         $rModel = $this->models->{$r}();
-        $alunos = $rModel->readAlunoMatriculados($curso);
+        $alunos = $rModel->readAll();
         foreach ($alunos as $aluno) {
             $item = $this->view->newItem();
             $item->setId($aluno->getId());
             $item->setType($aluno->getType());
-            $this->view->getData()->addRelationships($item->get());
+            //$this->view->getData()->addRelationships($item->get());
             $item->setAttributes($aluno->get());
             $this->view->addIncluded($item);
         }
@@ -86,21 +75,21 @@ class DisciplinaController extends Controller
         return $response;
     }
 
-    public function addDisciplina($request, $response, $args) 
+    public function addDisciplina($request, $response, $args)
     {
         // TODO
         // Cria uma nova disciplina
         return $response;
     }
 
-    public function editDisciplina($request, $response, $args) 
+    public function editDisciplina($request, $response, $args)
     {
         // TODO
         // Altera as infos da disciplina
         return $response;
     }
 
-    public function delDisciplina($request, $response, $args) 
+    public function delDisciplina($request, $response, $args)
     {
         // TODO
         // Delete a disciplina
@@ -110,21 +99,21 @@ class DisciplinaController extends Controller
 
     // CURSO
 
-    public function getAllCurso($request, $response, $args) 
+    public function getAllCurso($request, $response, $args)
     {
         // TODO
         // Retorna todas as disciplinas que sao daquele curso
         return $response;
     }
 
-    public function editCurso($request, $response, $args) 
+    public function editCurso($request, $response, $args)
     {
         // TODO
         // Altera o curso da disciplina
         return $response;
     }
 
-    public function delCurso($request, $response, $args) 
+    public function delCurso($request, $response, $args)
     {
         // TODO
         // Deleta a disciplina daquele curso
@@ -134,12 +123,12 @@ class DisciplinaController extends Controller
 
     public function detalheMateriaAluno($request, $response, $args)
     {
-        
+
     }
 
     public function detalheMateriadisciplina($request, $response, $args)
     {
-        
+
     }
 
 }
