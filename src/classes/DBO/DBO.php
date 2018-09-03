@@ -36,7 +36,7 @@ abstract class DBO
     // CREATE
     public function create()
     {
-        $keys = $this->getKeys();
+        $keys = $this->getKeys(false);
         $values = implode(",", $this->getSQL());
         $sql = "INSERT INTO " . $this->table_name .
             " (" . $keys . ") values (" . $values . ');';
@@ -187,14 +187,16 @@ abstract class DBO
     {
         $cols = array();
         foreach ($this->get() as $k => $v) {
+            // var_export($k . " = " . $this->{$k} ." --> ". $v);
+            // if (!isset($this->{$k})) continue;
             $cols[$k] = '"' . $v . '"';
         }
         return $cols;
     }
 
-    protected function getKeys()
+    protected function getKeys($sql = true)
     {
-        $keys = array_keys($this->get(true));
+        $keys = array_keys($this->get($sql));
         return implode(",", $keys);
     }
     

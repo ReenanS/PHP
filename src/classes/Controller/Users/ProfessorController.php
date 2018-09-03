@@ -62,9 +62,6 @@ class ProfessorController extends Controller
     }
 
     public function addLeciona($request, $response, $args) {
-        // TODO
-        // Cria info que o prof leciona a disciplina
-
         $professor = $args['pid'];
         $disciplina = $args['did'];
 

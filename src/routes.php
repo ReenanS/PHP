@@ -91,12 +91,12 @@ $app->group('/disciplina', function () {
     // $this->get('', DisciplinaController::class . ':getAllDisciplina');
 
     // 4
-    // $this->post('', DisciplinaController::class . ':addDisciplina');
+    $this->post('', DisciplinaController::class . ':addDisciplina');
 
     $this->group('/{did}', function () {
         $this->get('', DisciplinaController::class . ':getDisciplina');
-        // $this->put('', DisciplinaController::class . ':editDisciplina');
-        // $this->delete('', DisciplinaController::class . ':delDisciplina');
+        $this->put('', DisciplinaController::class . ':editDisciplina');
+        $this->delete('', DisciplinaController::class . ':delDisciplina');
         
         $this->group('/aluno', function() {
             $this->get('', AlunoController::class . ':getAllMatriculaAluno');
