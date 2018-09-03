@@ -66,20 +66,12 @@ $app->group('/professor/{pid}', function () {
 // especifico do aluno
 $app->group('/aluno/{aid}', function () {
 
-<<<<<<< HEAD
     $this->group('/disciplina', function () {
         $this->get('', AlunoController::class . ':getAllMatriculaDisciplina');
         $this->get('/{did}', AlunoController::class . ':getMatricula');
         // $this->post('/{did}', AlunoController::class . ':addMatricula');
         // $this->delete('/{did}', AlunoController::class . ':delMatricula');
 
-=======
-    // $this->get('/disciplina', AlunoController::class . ':getAllMatriculaDisciplina');
-    $this->group('/disciplina/{did}', function () {
-        $this->get('', AlunoController::class . ':getMatricula');
-        $this->post('', AlunoController::class . ':addMatricula');
-        $this->delete('', AlunoController::class . ':delMatricula');
->>>>>>> 88af8e2944d1ec850a6caf2a9cd09d176826ad25
 
         $this->group('/nota', function () {
             $this->get('', NotaController::class . ':getAllNota');
