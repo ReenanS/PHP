@@ -131,6 +131,7 @@ $app->group('/disciplina', function () {
 });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // ??? -> [NAO FAZER]
 // $app->group('/curso', function () {
 //     // $this->get('/', CursoController::class . ':getAllCurso');
@@ -148,6 +149,8 @@ $app->group('/disciplina', function () {
 //     // ???
 // });
 =======
+=======
+>>>>>>> parent of 88af8e2... added CRUD curso
 $app->group('/curso', function () {
 
     // $this->get('/', CursoController::class . ':getAllCurso');
@@ -166,6 +169,9 @@ $app->group('/curso', function () {
     // });
     // ???
 });
+<<<<<<< HEAD
+>>>>>>> parent of 88af8e2... added CRUD curso
+=======
 >>>>>>> parent of 88af8e2... added CRUD curso
 
 

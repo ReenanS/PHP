@@ -177,7 +177,11 @@ class DisciplinaController extends Controller
     public function detalheMateriaAluno($request, $response, $args)
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> parent of 88af8e2... added CRUD curso
 =======
         
 >>>>>>> parent of 88af8e2... added CRUD curso
@@ -186,7 +190,11 @@ class DisciplinaController extends Controller
     public function detalheMateriadisciplina($request, $response, $args)
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> parent of 88af8e2... added CRUD curso
 =======
         
 >>>>>>> parent of 88af8e2... added CRUD curso

@@ -94,85 +94,22 @@ class CursoController extends Controller
 
     public function addCurso($request, $response, $args)
     {
-        $professor = $args['pid'];
-
-        $body = $request->getParsedBody();
-        if (!isset($body['data'])) return $response->withStatus(400);
-        $this->view->set($body);
-
-        $this->db->beginTransaction();
-        try {
-            $data = $this->view->getData();
-            $atrib = $data->getAttributes();
-
-            $model = $this->models->curso();
-            $atrib['professor'] = $professor;
-            $model->set($atrib);
-            $cid = $model->create();
-            if ($cid == null) return $response->withStatus(400);
-
-            $response = $response->withStatus(201);
-            $this->db->commit();
-        } catch(PDOException $e) {
-            $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
-            $response = $response->withStatus(400);
-            $this->db->rollBack();
-        }
+        // TODO
+        // Cria um novo curso
         return $response;
     }
 
     public function editCurso($request, $response, $args)
     {
-        $professor = $args['pid'];
-        $curso = $args['cid'];
-
-        $body = $request->getParsedBody();
-        if (!isset($body['data'])) return $response->withStatus(400);
-        $this->view->set($body);
-
-        $this->db->beginTransaction();
-        try {
-            $data = $this->view->getData();
-            $atrib = $data->getAttributes();
-
-            $model = $this->models->curso();
-            $model->setId($curso);
-            $model->read();
-            if ($model->professor != $professor) return $response->withStatus(401);
-
-            $model->set($atrib);
-            $model->update();
-
-            $this->db->commit();
-        } catch(PDOException $e) {
-            $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
-            $response = $response->withStatus(400);
-            $this->db->rollBack();
-        }
+        // TODO
+        // Altera as infos do curso
         return $response;
     }
 
     public function delCurso($request, $response, $args)
     {
-        $professor = $args['pid'];
-        $curso = $args['cid'];
-
-        $this->db->beginTransaction();
-        try {
-            $model = $this->models->curso();
-            $model->setId($curso);
-            $model->read();
-            if ($model->professor != $professor) return $response->withStatus(401);
-
-            $model->delete();
-            $response = $response->withStatus(204);
-
-            $this->db->commit();
-        } catch(PDOException $e) {
-            $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
-            $response = $response->withStatus(400);
-            $this->db->rollBack();
-        }
+        // TODO
+        // Deleta o curso
         return $response;
     }
 }
