@@ -36,7 +36,7 @@ abstract class DBO
     // CREATE
     public function create()
     {
-        $keys = $this->getKeys();
+        $keys = $this->getKeys(false);
         $values = implode(",", $this->getSQL());
         $sql = "INSERT INTO " . $this->table_name .
             " (" . $keys . ") values (" . $values . ');';
@@ -121,7 +121,7 @@ abstract class DBO
         $setArray = array();
         $updateCols = $this->removeFK($this->get());
         foreach ($updateCols as $k => $v) {
-            array_push($setArray, $k . " = " . $v);
+            array_push($setArray, $k . " = \"" . $v ."\"");
         }
         $set = implode(",", $setArray);
         return $this->updateSQL($set);
@@ -131,7 +131,8 @@ abstract class DBO
     {
         $sql = "UPDATE " . $this->table_name .
             " SET " . $set .
-            " WHERE " . $this->table_name . " = '" . $this->id . "';";
+            " WHERE " . $this->table_name . " = \"" . $this->id . "\";";
+        var_export($sql);
         $stmt = $this->db->exec($sql);
         return ($stmt > 0);
     }
@@ -186,14 +187,16 @@ abstract class DBO
     {
         $cols = array();
         foreach ($this->get() as $k => $v) {
+            // var_export($k . " = " . $this->{$k} ." --> ". $v);
+            // if (!isset($this->{$k})) continue;
             $cols[$k] = '"' . $v . '"';
         }
         return $cols;
     }
 
-    protected function getKeys()
+    protected function getKeys($sql = true)
     {
-        $keys = array_keys($this->get(true));
+        $keys = array_keys($this->get($sql));
         return implode(",", $keys);
     }
     

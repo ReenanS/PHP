@@ -77,22 +77,75 @@ class DisciplinaController extends Controller
 
     public function addDisciplina($request, $response, $args)
     {
-        // TODO
-        // Cria uma nova disciplina
+        $body = $request->getParsedBody();
+        if (!isset($body['data'])) return $response->withStatus(400);
+        $this->view->set($body);
+
+        $this->db->beginTransaction();
+        try {
+            $data = $this->view->getData();
+            $atrib = $data->getAttributes();
+
+            $model = $this->models->disciplina();
+            $model->set($atrib);
+            $did = $model->create();
+            if ($did == null) return $response->withStatus(400);
+
+            $response = $response->withStatus(201);
+            $this->db->commit();
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
+            $response = $response->withStatus(400);
+            $this->db->rollBack();
+        }
+
         return $response;
     }
 
     public function editDisciplina($request, $response, $args)
     {
-        // TODO
-        // Altera as infos da disciplina
+        $disciplina = $args['did'];
+
+        $body = $request->getParsedBody();
+        if (!isset($body['data'])) return $response->withStatus(400);
+        $this->view->set($body);
+
+        $this->db->beginTransaction();
+        try {
+            $data = $this->view->getData();
+            $atrib = $data->getAttributes();
+
+            $model = $this->models->disciplina();
+            $model->setId($disciplina);
+            $model->set($atrib);
+            $model->update();
+
+            $this->db->commit();
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
+            $response = $response->withStatus(400);
+            $this->db->rollBack();
+        }
         return $response;
     }
 
     public function delDisciplina($request, $response, $args)
     {
-        // TODO
-        // Delete a disciplina
+        $disciplina = $args['did'];
+
+        $this->db->beginTransaction();
+        try {
+            $model = $this->models->disciplina();
+            $model->setId($disciplina);
+            $model->delete();
+            $response = $response->withStatus(204);
+
+            $this->db->commit();
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
+            $response = $response->withStatus(400);
+            $this->db->rollBack();
+        }
         return $response;
     }
 
@@ -120,6 +173,7 @@ class DisciplinaController extends Controller
         return $response;
     }
 
+<<<<<<< HEAD
 
     public function detalheMateriaAluno($request, $response, $args)
     {
@@ -131,4 +185,6 @@ class DisciplinaController extends Controller
 
     }
 
+=======
+>>>>>>> 88af8e2944d1ec850a6caf2a9cd09d176826ad25
 }

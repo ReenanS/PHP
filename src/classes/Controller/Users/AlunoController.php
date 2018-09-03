@@ -140,26 +140,26 @@ class AlunoController extends Controller
 
     public function addMatricula($request, $response, $args)
     {
-        // TODO
-        // Cria matricula do aluno na disciplina
-
-
         // $token = $request->getHeader('Authorization')[0];
         // if (!$this->security->validar($token)) 
         //     return $response->withStatus(401);
-        $disciplina = $args['uid'];
+        $aluno = $args['aid'];
+        $disciplina = $args['did'];
 
-        $body = $request->getParsedBody();
-        $this->view->set($body);
+        // $body = $request->getParsedBody();
+        // if (!isset($body['data'])) return $response->withStatus(400);
+        // $this->view->set($body);
 
         $this->db->beginTransaction();
         try {
-            foreach ($this->view->getData() as $data) {
-                $model = $this->models->aluno();
-                $data = $this->view->getData();
-                $atrib = $data->getAttributes();
-                $model->matricular($atrib['id'], $disciplina);
-            }
+            $model = $this->models->matricula();
+            $data = array(
+                "aluno" => $aluno,
+                "disciplina" => $disciplina
+            );
+            $model->set($data);
+            $mid = $model->create();
+            if ($mid == null) return $response->withStatus(400);
 
             $response = $response->withStatus(201);
             $this->db->commit();
@@ -174,8 +174,24 @@ class AlunoController extends Controller
 
     public function delMatricula($request, $response, $args)
     {
-        // TODO
-        // Deleta a matricula do aluno na disciplina
+        $aluno = $args['aid'];
+        $disciplina = $args['did'];
+
+        $this->db->beginTransaction();
+        try {
+            $model = $this->models->matricula();
+            $model->aluno = $aluno;
+            $model->disciplina = $disciplina;
+            $model->readByFK();
+            $model->delete();
+            $response = $response->withStatus(204);
+
+            $this->db->commit();
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
+            $response = $response->withStatus(400);
+            $this->db->rollBack();
+        }
         return $response;
     }
 
