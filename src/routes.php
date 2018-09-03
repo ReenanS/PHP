@@ -68,19 +68,19 @@ $app->group('/professor/{pid}', function () {
 // especifico do aluno
 $app->group('/aluno/{aid}', function () {
 
-    $this->group('/disciplina', function () {
-        // $this->get('', AlunoController::class . ':getAllMatriculaDisciplina');
-        $this->get('/{did}', AlunoController::class . ':getMatricula');
-
-        $this->post('/{did}', AlunoController::class . ':addMatricula');
-        $this->delete('/{did}', AlunoController::class . ':delMatricula');
+    // $this->get('/disciplina', AlunoController::class . ':getAllMatriculaDisciplina');
+    $this->group('/disciplina/{did}', function () {
+        $this->get('', AlunoController::class . ':getMatricula');
+        $this->post('', AlunoController::class . ':addMatricula');
+        $this->delete('', AlunoController::class . ':delMatricula');
 
         $this->group('/nota', function () {
             $this->get('', NotaController::class . ':getAllNota');
             $this->get('/{nid}', NotaController::class . ':getNota');
-            // $this->post('', NotaController::class . ':addNota');
-            // $this->put('/{nid}', NotaController::class . ':editNota');
-            // $this->delete('/{nid}', NotaController::class . ':delNota');
+
+            $this->post('', NotaController::class . ':addNota');
+            $this->put('/{nid}', NotaController::class . ':editNota');
+            $this->delete('/{nid}', NotaController::class . ':delNota');
         });
     });
 
