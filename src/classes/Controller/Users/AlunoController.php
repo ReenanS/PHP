@@ -11,144 +11,70 @@ class AlunoController extends Controller
 {
     public function getAllMatriculaDisciplina($request, $response, $args)
     {
-        // TODO
-        // Retorna todas as disciplinas que o aluno está matriculado
+        $aluno = $args['aid'];
 
-        /*Aluno*/
-        $aluno = $args['aid']; //pega o id da disciplina
-
-        // cria uma classe dbo baseado no tipo do disciplina
-        // os {'x'} chama uma function de dentro da classe passando uma string para ela (dinamico)
-        $model = $this->models->aluno();
-        $model->setId($aluno); //setei o ID
-        
-        // busca os dados no BD
-        $model->read();
-
-        // Monta a view
-        $data = $this->view->getData();
-        $data->setType($model->getType());
-        $data->setAttributes($model->get());
-        $data->setId($model->getId());
-
-        // Fazer as relations pegar da tabela notas/alunos
-        // Preenche a view (JSON API) para retornar um JSON apropriado
-        $r = "disciplina";
-        $rModel = $this->models->{$r}();
-        $disciplinas = $rModel->readAll();
-        foreach ($disciplinas as $disciplina) {
-            $item = $this->view->newItem();
-            $item->setId($disciplina->getId());
-            $item->setType($disciplina->getType());
-            //$this->view->getData()->addRelationships($item->get()); //Atencao - Dava erro no get() linha 23 do resourceObject
-            $item->setAttributes($disciplina->get());
-            $this->view->addIncluded($item);
-        }
-
-        $response = $response->withJSON($this->view->get());
+        try {
+            $model = $this->models->disciplina();
+            $filter = array(
+                "filter" => "aluno",
+                "id" => $aluno
+            );
+            $this->readAll($model, $filter);
+            $response = $response->withJSON($this->view->get());
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: all matricula: ".$e->getMessage());
+            $response = $response->withStatus(400);
+        } 
         return $response;
     }
 
     public function getAllMatriculaAluno($request, $response, $args)
     {
-        // TODO
+        // TODO !!
         // Retorna todos os alunos matriculados na disciplina
+        $disciplina = $args['did'];
 
-        /*Disciplina*/
-        $disciplina = $args['did']; //pega o id da disciplina
-
-        // cria uma classe dbo baseado no tipo do disciplina
-        // os {'x'} chama uma function de dentro da classe passando uma string para ela (dinamico)
-        $model = $this->models->disciplina();
-        $model->setId($disciplina); //setei o ID
-        
-        // busca os dados no BD
-        $model->read();
-
-        // Monta a view
-        $data = $this->view->getData();
-        $data->setType($model->getType());
-        $data->setAttributes($model->get());
-        $data->setId($model->getId());
-
-        // Fazer as relations pegar da tabela notas/alunos
-        // Preenche a view (JSON API) para retornar um JSON apropriado
-        $r = "aluno";
-        $rModel = $this->models->{$r}();
-        $alunos = $rModel->readAlunoMatriculados($disciplina);
-        foreach ($alunos as $aluno) {
-            $item = $this->view->newItem();
-            $item->setId($aluno->getId());
-            $item->setType($aluno->getType());
-            //$this->view->getData()->addRelationships($item->get()); //Atencao - Dava erro no get() linha 23 do resourceObject
-            $item->setAttributes($aluno->get());
-            $this->view->addIncluded($item);
-        }
-
-        $response = $response->withJSON($this->view->get());
+        try {
+            $model = $this->models->aluno();
+            $filter = array(
+                "filter" => "disciplina",
+                "id" => $disciplina
+            );
+            $this->readAll($model, $filter);
+            $response = $response->withJSON($this->view->get());
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: all matricula: ".$e->getMessage());
+            $response = $response->withStatus(400);
+        } 
         return $response;
     }
 
     public function getMatricula($request, $response, $args)
     {
-        // TODO
-        // Retorna as infos da disciplina se o aluno estiver matriculado
-        
-        /*Aluno*/
-        $aluno = $args['aid']; //pega o id do usuario
-        $model = $this->models->aluno();
-        
-        /*Disciplina*/
-        $disciplina = $args['did']; //pega o id da disciplina
+        $aluno = $args['aid'];
+        $disciplina = $args['did'];
 
-        // cria uma classe dbo baseado no tipo do disciplina
-        // os {'x'} chama uma function de dentro da classe passando uma string para ela (dinamico)
-        $model = $this->models->disciplina();
-        $model->setId($disciplina); //setei o ID
-        
-        // busca os dados no BD
-        $model->read();
+        try {
+            if ($this->alunoMatriculado($aluno,$disciplina)) return $response->withStatus(401);
 
-        //if (!$model->validarMatricula($aluno)) return $response->withStatus(401);
+            $model = $this->models->disciplina();
+            $model->setId($disciplina);
+            $model->read();
 
-        // $model->get();
+            $this->read($model);
+            $response = $response->withJSON($this->view->get());
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: user: ".$e->getMessage());
+            $response = $response->withStatus(400);
+        } 
 
-        // Monta a view
-        $data = $this->view->getData();
-        $data->setType($model->getType());
-        $data->setAttributes($model->get());
-        $data->setId($model->getId());
-
-        // Fazer as relations pegar da tabela notas/alunos
-        // $relations = $this->disciplina->getRelations();
-        // Preenche a view (JSON API) para retornar um JSON apropriado
-        $r = "nota";
-        $rModel = $this->models->{$r}();
-        $rModel->readNota($aluno, $disciplina);
-        if ($rModel->getId() != null) {
-            $item = $this->view->newItem();
-            $item->setId($rModel->getId());
-            $item->setType($rModel->getType());
-            $this->view->getData()->addRelationships($item->get());
-            $item->setAttributes($rModel->getInfo());
-            $this->view->addIncluded($item);
-        }
-
-        $response = $response->withJSON($this->view->get());
         return $response;
     }
 
     public function addMatricula($request, $response, $args)
     {
-        // $token = $request->getHeader('Authorization')[0];
-        // if (!$this->security->validar($token)) 
-        //     return $response->withStatus(401);
         $aluno = $args['aid'];
         $disciplina = $args['did'];
-
-        // $body = $request->getParsedBody();
-        // if (!isset($body['data'])) return $response->withStatus(400);
-        // $this->view->set($body);
 
         $this->db->beginTransaction();
         try {
@@ -161,7 +87,9 @@ class AlunoController extends Controller
             $mid = $model->create();
             if ($mid == null) return $response->withStatus(400);
 
-            $response = $response->withStatus(201);
+            $path = $request->getUri()->getPath();
+            $response = $response->withStatus(201)->withHeader('location', $path);
+            
             $this->db->commit();
         } catch (PDOException $e) {
             $this->logger->addInfo("ERRO: Novo Field: " . $e->getMessage());
@@ -180,9 +108,11 @@ class AlunoController extends Controller
         $this->db->beginTransaction();
         try {
             $model = $this->models->matricula();
-            $model->aluno = $aluno;
             $model->disciplina = $disciplina;
-            $model->readByFK();
+            $model->aluno = $aluno;
+            $model->readByFk();
+            if ($model->getId() == null) return $response->withStatus(401);
+
             $model->delete();
             $response = $response->withStatus(204);
 

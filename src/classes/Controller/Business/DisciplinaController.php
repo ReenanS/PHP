@@ -12,66 +12,33 @@ class DisciplinaController extends Controller
 
     public function getAllDisciplina($request, $response, $args)
     {
-        // TODO
-        // Retorna todas as disciplinas
-
         try {
-            $fields = $this->models->disciplina();
-            $allDisciplina = $fields->readAll();
-            foreach ($allDisciplina as $f) {
-                $item = $this->view->newItem();
-                $item->setType($f->getType());
-                $item->setId($f->getId());
-                $item->setAttributes($f->get());
-                $this->view->addData($item);
-            }
-
+            $model = $this->models->disciplina();
+            $this->readAll($model);
             $response = $response->withJSON($this->view->get());
-
-        } catch (PDOException $e) {
-            $this->logger->addInfo("ERRO: fields: " . $e->getMessage());
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: all disciplina: ".$e->getMessage());
             $response = $response->withStatus(400);
-        }
-
+        } 
         return $response;
-
     }
 
     public function getDisciplina($request, $response, $args)
     {
-        // TODO
-        // Retorna todas as infos da disciplina
+        $disciplina = $args['did'];
 
-        /*disciplina*/
-        $disciplina = $args['did']; //pega o id do usuario
-        $model = $this->models->disciplina();
-        $model->setId($disciplina); //setei o ID
-        
-        // busca os dados no BD
-        $model->read();
+        try {
+            $model = $this->models->disciplina();
+            $model->setId($disciplina);
+            $model->read();
+            if (empty($model->get())) return $response->withStatus(404);
 
-       // if (!$model->validarDocente($disciplina)) return $response->withStatus(401);
-
-        // Monta a view
-        $data = $this->view->getData();
-        $data->setType($model->getType());
-        $data->setAttributes($model->get());
-        $data->setId($model->getId());
-
-        // Preenche a view (JSON API) para retornar um JSON apropriado
-        $r = "aluno";
-        $rModel = $this->models->{$r}();
-        $alunos = $rModel->readAll();
-        foreach ($alunos as $aluno) {
-            $item = $this->view->newItem();
-            $item->setId($aluno->getId());
-            $item->setType($aluno->getType());
-            //$this->view->getData()->addRelationships($item->get());
-            $item->setAttributes($aluno->get());
-            $this->view->addIncluded($item);
-        }
-
-        $response = $response->withJSON($this->view->get());
+            $this->read($model);
+            $response = $response->withJSON($this->view->get());
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: user: ".$e->getMessage());
+            $response = $response->withStatus(400);
+        } 
         return $response;
     }
 
@@ -88,10 +55,11 @@ class DisciplinaController extends Controller
 
             $model = $this->models->disciplina();
             $model->set($atrib);
-            $did = $model->create();
-            if ($did == null) return $response->withStatus(400);
+            $id = $model->create();
+            if ($id == null) return $response->withStatus(400);
 
-            $response = $response->withStatus(201);
+            $path = $request->getUri()->getPath() . "/" . $id;
+            $response = $response->withStatus(201)->withHeader('location', $path);
             $this->db->commit();
         } catch(PDOException $e) {
             $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());

@@ -8,60 +8,44 @@ use \View\ResourceObject;
 
 // Exemplo de Implementação
 class UserController extends Controller
-{
-    
+{   
     // USERS
 
-    public function getAllUser($request, $response, $args) 
-    {
-        // TODO
-        // Retorna todos os usuários, professores ou alunos
-        // que estão na base, dependendo do tipo
+    public function getAllUser($request, $response, $args) {
+        $tipo = $args['tipo'];
 
+        try {
+            $model = $this->models->{$tipo}();
+            $this->readAll($model);
+            $response = $response->withJSON($this->view->get());
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: all users: ".$e->getMessage());
+            $response = $response->withStatus(400);
+        } 
+        return $response;
     }
 
-    public function getUser($request, $response, $args)
-    {
-        $uid = $args['uid'];
-        $tipo = $args['_'];
+    public function getUser($request, $response, $args) {
+        $id = $args['uid'];
+        $tipo = $args['tipo'];
 
-        if ($this->user->readByFK('user', $uid) == null) return $response->withStatus(403);
+        try {
+            $model = $this->models->{$tipo}();
+            $model->setId($id);
+            $model->read();
+            if ($model->user == null) return $response->withStatus(404);
+            $this->read($model);
+            $response = $response->withJSON($this->view->get());
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: user: ".$e->getMessage());
+            $response = $response->withStatus(400);
+        } 
 
-        $this->user->setTipoByKey($tipo);
-
-        // cria uma classe dbo baseado no tipo do user (prof ou aluno)
-        // os {'x'} chama uma function de dentro da classe passando uma string para ela (dinamico)
-
-        $model = $this->models->{$this->user->getTipo()}();
-
-        $model->readByFK('user', $this->user->getId());
-
-        // busca os dados na BD
-        $this->read($model);
-
-        // busca todas as tbl relacionadas com esse user
-        // no caso seria todas as tbl q possuem a fk do user
-        $relations = $model->getRelations();
-
-        // Preenche a view (JSON API) para retornar um JSON apropriado
-        foreach ($relations as $r) {
-            $rModel = $this->models->{$r}();
-            $rModel->readByFK($this->user->getTipo(), $this->user->getId());
-            if ($rModel->getId() == null) continue;
-            $item = $this->view->newItem();
-            $item->setId($rModel->getId());
-            $item->setType($rModel->getType());
-            $this->view->getData()->addRelationships($item->get());
-            $item->setAttributes($rModel->get());
-            $this->view->addIncluded($item);
-        }
-
-        $response = $response->withJSON($this->view->get());
         return $response;
     }
 
     public function addUser($request, $response, $args) {
-        $tipo = $args['_'];
+        $tipo = $args['tipo'];
 
         $body = $request->getParsedBody();
         $this->view->set($body);
@@ -88,7 +72,9 @@ class UserController extends Controller
             $id = $model->create();
             if ($id == null) return $response->withStatus(400);
 
-            $response = $response->withStatus(201);
+            $path = $request->getUri()->getPath() . "/" . $id;
+            $response = $response->withStatus(201)->withHeader('location', $path);
+
             $this->db->commit();
         } catch(PDOException $e) {
             $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
@@ -100,7 +86,7 @@ class UserController extends Controller
     }
 
     public function editUser($request, $response, $args) {
-        $tipo = $args['_'];
+        $tipo = $args['tipo'];
         $user = $args['uid'];
 
         $body = $request->getParsedBody();
@@ -114,13 +100,14 @@ class UserController extends Controller
 
             // TODO: separate user
             $model = $this->models->{$tipo}();
-            if ($tipo == "user") {
-                $model->setId($user);
-            } else {
-                $model->user = $user;
-                $model->readByFK('user',$user);
-            }
-            var_export($model->getId());
+            // if ($tipo == "user") {
+            //     $model->setId($user);
+            // } else {
+            //     $model->user = $user;
+            //     $model->readByFK('user',$user);
+            // }
+            $model->setId($user);
+            // var_export($model->getId());
             $model->set($atrib);
             $model->update();
             // if ($id == null) return $response->withStatus(400);
@@ -136,24 +123,36 @@ class UserController extends Controller
     }
 
     public function delUser($request, $response, $args) {
-        $tipo = $args['_'];
-        $user = $args['uid'];
+        $tipo = $args['tipo'];
+        $id = $args['uid'];
 
         $this->db->beginTransaction();
         try {
             // TODO: separate user
             $model = $this->models->{$tipo}();
-            if ($tipo != "user") {
-                $model->user = $user;
-                $model->readByFK('user',$user);
-                var_export($model->getId());
-                $model->delete();
-                $model = $this->models->user();
-            }
+            $model->setId($id);
+            $model->read();
+            $user = $model->user;
+            var_export($model->getId());
+            $model->delete();
+
+            $model = $this->models->user();
             $model->setId($user);
             var_export($model->getId());
             $model->delete();
             $response = $response->withStatus(204);
+
+            // if ($tipo != "user") {
+            //     $model->user = $user;
+            //     $model->readByFK('user',$user);
+            //     var_export($model->getId());
+            //     $model->delete();
+            //     $model = $this->models->user();
+            // }
+            // $model->setId($user);
+            // var_export($model->getId());
+            // $model->delete();
+            // $response = $response->withStatus(204);
 
             $this->db->commit();
         } catch(PDOException $e) {

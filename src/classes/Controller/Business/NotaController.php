@@ -8,59 +8,51 @@ use \View\ResourceObject;
 
 class NotaController extends Controller
 {
-    // alunoESSOR
+    // PROFESSOR
 
     public function getAllDetalheNota($request, $response, $args)
     {
-        // TODO
-        // Retorna todas as infos (detalhe) das notas daquela disciplina
+        $professor = $args['pid'];
+        $disciplina = $args['did'];
 
+        try {
+            if ($this->profLecionaDisciplina($professor, $disciplina)) return $response->withStatus(401);
+            
+            $model = $this->models->detalhe();
+            $filter = array(
+                "filter" => "disciplina",
+                "id" => $disciplina
+            );
+            $this->readAll($model, $filter);
+            $response = $response->withJSON($this->view->get());
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: all detalhe nota: ".$e->getMessage());
+            $response = $response->withStatus(400);
+        } 
+        return $response;
     }
 
     public function getDetalheNota($request, $response, $args)
     {
-        // TODO
-        // Retorna as infos (detalhe) de um nota daquela disciplina
-        
-        /*Prof*/
-        $disciplina = $args['did']; //pega o id do usuario
-        $model = $this->models->professor();
-        
-        /*Nota*/
-        $nota = $args['nid']; //pega o id da nota
+        $professor = $args['pid'];
+        $disciplina = $args['did'];
+        $id = $args['nid'];
 
-        // cria uma classe dbo baseado na nota
-        // os {'x'} chama uma function de dentro da classe passando uma string para ela (dinamico)
-        $model = $this->models->detalhe();
-        $model->setId($nota); //setei o ID
-        
-        // busca os dados no BD
-        $model->read();
+        try {
+            if ($this->profLecionaDisciplina($professor, $disciplina)) return $response->withStatus(401);
 
-        //if (!$model->validarDocente($prof)) return $response->withStatus(401);
-        
-        // Monta a view
-        $data = $this->view->getData();
-        $data->setType($model->getType());
-        $data->setAttributes($model->get());
-        $data->setId($model->getId());
+            $model = $this->models->detalhe();
+            $model->setId($id);
+            $model->read();
+            if ($model->disciplina != $disciplina) return $response->withStatus(401);
 
-        // Preenche a view (JSON API) para retornar um JSON apropriado
-        $r = "aluno";
-        $rModel = $this->models->{$r}();
-        $alunos = $rModel->readAlunoMatriculados($disciplina);
+            $this->read($model);
+            $response = $response->withJSON($this->view->get());
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: detalhe: ".$e->getMessage());
+            $response = $response->withStatus(400);
+        } 
 
-        foreach ($alunos as $aluno) {
-            $item = $this->view->newItem();
-            $item->setId($aluno->getId());
-            $item->setType($aluno->getType());
-            //$this->view->getData()->addRelationships($item->get());
-            $item->setAttributes($aluno->get());
-            $this->view->addIncluded($item);
-
-        }
-
-        $response = $response->withJSON($this->view->get());
         return $response;
     }
 
@@ -78,26 +70,22 @@ class NotaController extends Controller
             $data = $this->view->getData();
             $atrib = $data->getAttributes();
         
-            // get prof leciona a disciplina
-            $model = $this->models->leciona();
-            $model->disciplina = $disciplina;
-            $model->professor = $professor;
-            $model->readByFk();
-            if ($model->getId() == null) return $response->withStatus(401);
+            if ($this->profLecionaDisciplina($professor, $disciplina)) return $response->withStatus(401);
 
             // set fk
             $atrib['disciplina'] = $disciplina;
             
-            var_export($atrib);
             $model = $this->models->detalhe();
             $model->set($atrib);
-            $did = $model->create();
-            if ($did == null) return $response->withStatus(400);
+            $id = $model->create();
+            if ($id == null) return $response->withStatus(400);
 
-            $response = $response->withStatus(201);
+            $path = $request->getUri()->getPath() . "/" . $id;
+            $response = $response->withStatus(201)->withHeader('location', $path);
+
             $this->db->commit();
         } catch(PDOException $e) {
-            $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
+            $this->logger->addInfo("ERRO: Novo detalhe: ".$e->getMessage());
             $response = $response->withStatus(400);
             $this->db->rollBack();
         }
@@ -120,12 +108,7 @@ class NotaController extends Controller
             $data = $this->view->getData();
             $atrib = $data->getAttributes();
 
-            // get prof leciona a disciplina
-            $model = $this->models->leciona();
-            $model->disciplina = $disciplina;
-            $model->professor = $professor;
-            $model->readByFk();
-            if ($model->getId() == null) return $response->withStatus(401);
+            if ($this->profLecionaDisciplina($professor, $disciplina)) return $response->withStatus(401);
 
             // detalhe pertence a materia
             $model = $this->models->detalhe();
@@ -138,7 +121,7 @@ class NotaController extends Controller
 
             $this->db->commit();
         } catch(PDOException $e) {
-            $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
+            $this->logger->addInfo("ERRO: edit detalhe: ".$e->getMessage());
             $response = $response->withStatus(400);
             $this->db->rollBack();
         }
@@ -153,12 +136,7 @@ class NotaController extends Controller
 
         $this->db->beginTransaction();
         try {
-            // get prof leciona a disciplina
-            $model = $this->models->leciona();
-            $model->disciplina = $disciplina;
-            $model->professor = $professor;
-            $model->readByFk();
-            if ($model->getId() == null) return $response->withStatus(401);
+            if ($this->profLecionaDisciplina($professor, $disciplina)) return $response->withStatus(401);
 
             // detalhe pertence a materia
             $model = $this->models->detalhe();
@@ -171,7 +149,7 @@ class NotaController extends Controller
 
             $this->db->commit();
         } catch(PDOException $e) {
-            $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
+            $this->logger->addInfo("ERRO: delete detalhe: ".$e->getMessage());
             $response = $response->withStatus(400);
             $this->db->rollBack();
         }
@@ -182,83 +160,49 @@ class NotaController extends Controller
 
     public function getAllNota($request, $response, $args)
     {
-        // TODO
-        // Retorna todas as notas na discilplina do aluno
-        /*aluno*/
-        $aluno = $args['aid']; //pega o id do usuario
-        $model = $this->models->aluno();
-        $model->setId($aluno); //setei o ID
-        
-        // busca os dados no BD
-        $model->read();
+        $aluno = $args['aid'];
+        $disciplina = $args['did'];
 
-       // if (!$model->validarDocente($aluno)) return $response->withStatus(401);
-
-        // Monta a view
-        $data = $this->view->getData();
-        $data->setType($model->getType());
-        $data->setAttributes($model->get());
-        $data->setId($model->getId());
-
-        // Preenche a view (JSON API) para retornar um JSON apropriado
-        $r = "disciplina";
-        $rModel = $this->models->{$r}();
-        $disciplinas = $rModel->readAll();
-        foreach ($disciplinas as $disciplina) {
-            $item = $this->view->newItem();
-            $item->setId($disciplina->getId());
-            $item->setType($disciplina->getType());
-            //$this->view->getData()->addRelationships($item->get());
-            $item->setAttributes($disciplina->get());
-            $this->view->addIncluded($item);
-        }
-
-        $response = $response->withJSON($this->view->get());
+        try {
+            if ($this->alunoMatriculado($aluno, $disciplina)) return $response->withStatus(401);
+            
+            $model = $this->models->nota();
+            $filter = array(
+                "filter" => ["disciplina","aluno"],
+                "id" => [$disciplina,$aluno]
+            );
+            $this->readAll($model, $filter);
+            $response = $response->withJSON($this->view->get());
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: all nota: ".$e->getMessage());
+            $response = $response->withStatus(400);
+        } 
         return $response;
     }
 
     public function getNota($request, $response, $args)
     {
-        // TODO
-        // Retorna todas as info da nota na discilplina do aluno
-        
-        /*aluno*/
-        $aluno = $args['aid']; //pega o id do usuario
-        $model = $this->models->aluno();
-        
-        /*nota*/
-        $nota = $args['nid']; //pega o id da nota
+        $aluno = $args['aid'];
+        $disciplina = $args['did'];
+        $nota = $args['nid'];
 
-        // cria uma classe dbo baseado no tipo do nota
-        // os {'x'} chama uma function de dentro da classe passando uma string para ela (dinamico)
-        $model = $this->models->nota();
-        $model->setId($nota); //setei o ID
-        
-        // busca os dados no BD
-        $model->read();
+        try {
+            if ($this->alunoMatriculado($aluno, $disciplina)) return $response->withStatus(401);
 
-       // if (!$model->validarDocente($aluno)) return $response->withStatus(401);
+            $model = $this->models->nota();
+            $model->setId($nota);
+            $model->read();
+            if ($model->aluno != $aluno ||
+                $model->disciplina != $disciplina) 
+                    return $response->withStatus(401);
 
-        // Monta a view
-        $data = $this->view->getData();
-        $data->setType($model->getType());
-        $data->setAttributes($model->get());
-        $data->setId($model->getId());
+            $this->read($model);
+            $response = $response->withJSON($this->view->get());
+        } catch(PDOException $e) {
+            $this->logger->addInfo("ERRO: detalhe: ".$e->getMessage());
+            $response = $response->withStatus(400);
+        } 
 
-        // Preenche a view (JSON API) para retornar um JSON apropriado
-        $r = "aluno";
-        $rModel = $this->models->{$r}();
-        $alunos = $rModel->readAlunoMatriculados($nota);
-        foreach ($alunos as $aluno) {
-            $item = $this->view->newItem();
-            $item->setId($aluno->getId());
-            $item->setType($aluno->getType());
-            //$this->view->getData()->addRelationships($item->get());
-            $item->setAttributes($aluno->get());
-            $this->view->addIncluded($item);
-        }
-
-        $response = $response->withJSON($this->view->get());
         return $response;
     }
 
@@ -276,7 +220,6 @@ class NotaController extends Controller
             $data = $this->view->getData();
             $atrib = $data->getAttributes();
         
-            // get matricula
             $model = $this->models->matricula();
             $model->disciplina = $disciplina;
             $model->aluno = $aluno;
@@ -291,10 +234,11 @@ class NotaController extends Controller
             var_export($atrib);
             $model = $this->models->nota();
             $model->set($atrib);
-            $nid = $model->create();
-            if ($nid == null) return $response->withStatus(400);
+            $id = $model->create();
+            if ($id == null) return $response->withStatus(400);
 
-            $response = $response->withStatus(201);
+            $path = $request->getUri()->getPath() . "/" . $id;
+            $response = $response->withStatus(201)->withHeader('location', $path);
             $this->db->commit();
         } catch(PDOException $e) {
             $this->logger->addInfo("ERRO: Novo Field: ".$e->getMessage());
@@ -320,12 +264,7 @@ class NotaController extends Controller
             $data = $this->view->getData();
             $atrib = $data->getAttributes();
 
-            // aluno esta matriculado
-            $model = $this->models->matricula();
-            $model->disciplina = $disciplina;
-            $model->aluno = $aluno;
-            $model->readByFk();
-            if ($model->getId() == null) return $response->withStatus(401);
+            if ($this->alunoMatriculado($aluno,$disciplina)) return $response->withStatus(401);
 
             // nota pertence ao aluno
             $model = $this->models->nota();
@@ -355,13 +294,7 @@ class NotaController extends Controller
 
         $this->db->beginTransaction();
         try {
-
-            // aluno esta matriculado
-            $model = $this->models->matricula();
-            $model->disciplina = $disciplina;
-            $model->aluno = $aluno;
-            $model->readByFk();
-            if ($model->getId() == null) return $response->withStatus(401);
+            if ($this->alunoMatriculado($aluno,$disciplina)) return $response->withStatus(401);
 
             // nota pertence ao aluno
             $model = $this->models->nota();

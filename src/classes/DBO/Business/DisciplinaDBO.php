@@ -28,25 +28,47 @@ class DisciplinaDBO extends DBO
 
     public function __construct($db)
     {
-        // chama o contrutor do pai (hierarquia - extends)
         parent::__construct($db);
-
-        // set o nome da tabela no BD
         $this->setTableName("disciplina");
-
-        // set o tipo da classe para ser exportado no JSON API
-        // pode ser um nome diferente da tbl para aumentar a seguranca
-        // mas nesse caso o controller nao poderia implementar as funcoes de leitura de forma generica atual
-        // obs: talvez seja interessante revisar isso
         $this->setType("disciplina");
-
-        // set as colunas da tbl q sao chaves estrangeiras (FK)
-        // para isso o nome da tabela tem q ser igual o nome da coluna (sql naming convention)
         $this->setFK(["curso"]);
-
-        // tabelas que possuem relacao com essa
-        // essas tbls tem uma coluna disciplina q é uma FK para essa tbl
         $this->setRelations(["leciona", "matricula", "nota", "detalhe"]);
+    }
+
+    public function instantiateSelf()
+    {
+        return new self($this->db);
+    }
+
+    public function readAllByFK($k, $v)
+    {
+        if ($k == "professor") {
+            $sql = "SELECT " . $this->table_name . ', ' . $this->getKeys() .
+            " FROM " . $this->table_name .
+            " LEFT JOIN leciona USING (" . $this->table_name . ")" .
+            " WHERE " . $k . " = '" . $v . "'".
+            " ORDER BY " . $this->table_name . " ASC;";
+        } else if ($k == "aluno") {
+            $sql = "SELECT " . $this->table_name . ', ' . $this->getKeys() .
+            " FROM " . $this->table_name .
+            " LEFT JOIN matricula USING (" . $this->table_name . ")" .
+            " WHERE " . $k . " = '" . $v . "'".
+            " ORDER BY " . $this->table_name . " ASC;";
+        } else {
+            $sql = "SELECT " . $this->table_name . ', ' . $this->getKeys() .
+            " FROM " . $this->table_name .
+            " WHERE " . $k . " = '" . $v . "';";
+        }
+        // var_export($sql);
+        $stmt = $this->db->query($sql);
+        $response = array();
+        while ($row = $stmt->fetch()) {
+            $object = $this->instantiateSelf();
+            $object->set($row);
+            $object->setId($row[$this->table_name]);
+            array_push($response, $object);
+        }
+        return $response;
     }
 
 }

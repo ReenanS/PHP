@@ -24,6 +24,11 @@ class UserDBO extends DBO
         );
     }
 
+    public function instantiateSelf()
+    {
+        return new self($this->db);
+    }
+
     // getter and setter
     public function getTipo()
     {

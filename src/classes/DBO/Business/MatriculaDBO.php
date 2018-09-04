@@ -39,6 +39,11 @@ class MatriculaDBO extends DBO
         $this->setRelations(["nota"]);
     }
 
+    public function instantiateSelf()
+    {
+        return new self($this->db);
+    }
+
     public function readByFK($k = null, $v = null)
     {
         $sql = "SELECT " . $this->table_name . ',' . $this->getKeys() .

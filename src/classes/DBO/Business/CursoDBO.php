@@ -41,4 +41,9 @@ class CursoDBO extends DBO
         $this->setRelations(["disciplina"]);
     }
 
+    public function instantiateSelf()
+    {
+        return new self($this->db);
+    }
+
 }

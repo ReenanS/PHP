@@ -29,6 +29,24 @@ abstract class Controller
         $this->models = new ModelController($this->db);
     }
 
+    public function profLecionaDisciplina($professor,$disciplina) {
+        // get prof leciona a disciplina
+        $model = $this->models->leciona();
+        $model->professor = $professor;
+        $model->disciplina = $disciplina;
+        $model->readByFk();
+        return ($model->getId() == null);
+    }
+
+    public function alunoMatriculado($aluno,$disciplina) {
+        // aluno esta matriculado
+        $model = $this->models->matricula();
+        $model->disciplina = $disciplina;
+        $model->aluno = $aluno;
+        $model->readByFk();
+        return ($model->getId() == null);
+    }
+
     // CRUD Operations
 
     // cria uma nova classe no BD de um model generico
@@ -47,33 +65,82 @@ abstract class Controller
 
     // le os attributos de um modelo dbo generico no formato da JSON API
     // $model é a classe DBO
-    protected function read($model)
-    {
-        $data = $this->view->getData();
-        $data->setType($model->getType());
-        $data->setAttributes($model->get());
-        $data->setId($model->getId());
+    protected function read($model) {
+        try {
+            $data = $this->view->getData();
+            $data->setType($model->getType());
+            $data->setAttributes($model->get());
+            $data->setId($model->getId());
+            $relations = $model->getRelations();
+
+            foreach ($relations as $rType) {
+                $rModel = $this->models->{$rType}();
+                $allR = $rModel->readAllByFK($model->getType(), $model->getId());
+                foreach($allR as $r) {
+                    if ($r->getId() == null) continue;
+                    $item = $this->view->newItem();
+                    $item->setId($r->getId());
+                    $item->setType($r->getType());
+                    $data->addRelationships($item->get());
+
+                    $item->setAttributes($r->get());
+                    $this->view->addIncluded($item);
+                }
+            }
+        } catch (PDOException $e) {
+            throw $e;
+        }
     }
 
-    protected function update($data, $fk = [])
-    {
-        $model = $this->models->{$data->getType()}();
-        $info = $data->getAttributes();
-        foreach ($fk as $k => $v) {
-            $info[$k] = $v;
+    protected function readAll($model, $restriction = null) {
+        try {
+            $allInfo = ($restriction == null) ? 
+                        $model->readAll():
+                        $model->readAllByFk($restriction['filter'],$restriction['id']);
+            $relations = $model->getRelations();
+            foreach($allInfo as $info) {
+                $item = $this->view->newItem();
+                $item->setType($info->getType());
+                $item->setId($info->getId());
+                $item->setAttributes($info->get());
+                
+                foreach ($relations as $rType) {
+                    $rModel = $this->models->{$rType}();
+                    $allR = $rModel->readAllByFK($info->getType(), $info->getId());
+                    foreach($allR as $r) {
+                        if ($r->getId() == null) continue;
+                        $rItem = $this->view->newItem();
+                        $rItem->setId($r->getId());
+                        $rItem->setType($r->getType());
+                        $item->addRelationships($rItem->get());
+                    }
+                }
+                $this->view->addData($item);
+            }
+        } catch (PDOException $e) {
+            throw $e;
         }
-        $model->set($info);
-        return $model->update();
     }
 
-    protected function delete($data, $fk = [])
-    {
-        $model = $this->models->{$data->getType()}();
-        $info = $data->getAttributes();
-        foreach ($fk as $k => $v) {
-            $info[$k] = $v;
-        }
-        $model->set($info);
-        return $model->delete();
-    }
+    // protected function update($data, $fk = [])
+    // {
+    //     $model = $this->models->{$data->getType()}();
+    //     $info = $data->getAttributes();
+    //     foreach ($fk as $k => $v) {
+    //         $info[$k] = $v;
+    //     }
+    //     $model->set($info);
+    //     return $model->update();
+    // }
+
+    // protected function delete($data, $fk = [])
+    // {
+    //     $model = $this->models->{$data->getType()}();
+    //     $info = $data->getAttributes();
+    //     foreach ($fk as $k => $v) {
+    //         $info[$k] = $v;
+    //     }
+    //     $model->set($info);
+    //     return $model->delete();
+    // }
 }

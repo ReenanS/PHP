@@ -20,7 +20,13 @@ class ResourceObject
             if (isset($v)) {
                 if ($k == 'relationships') {
                     foreach ($v as $rK => $rV) {
-                        $json[$k][$rK]['data'] = $rV['data']->get();
+                        if (is_a($rV['data'], ResourceObject::class))
+                            $json[$k][$rK]['data'] = $rV['data']->get();
+                        else {
+                            foreach($rV['data'] as $data) {
+                                $json[$k][$rK]['data'][] = $data->get();
+                            }
+                        }
                     }
                 } else $json[$k] = $v;
             }

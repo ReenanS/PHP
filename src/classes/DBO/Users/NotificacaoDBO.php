@@ -24,4 +24,9 @@ class NotificacaoDBO extends DBO
         $this->setRelations(["mensagem"]);
     }
 
+    public function instantiateSelf()
+    {
+        return new self($this->db);
+    }
+
 }

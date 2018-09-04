@@ -41,4 +41,9 @@ class DetalheDBO extends DBO
         $this->setRelations(["nota"]);
     }
 
+    public function instantiateSelf()
+    {
+        return new self($this->db);
+    }
+
 }
