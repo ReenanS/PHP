@@ -23,7 +23,7 @@ class NotaController extends Controller
         // Retorna as infos (detalhe) de um nota daquela disciplina
         
         /*Prof*/
-        $prof = $args['pid']; //pega o id do usuario
+        $disciplina = $args['did']; //pega o id do usuario
         $model = $this->models->professor();
         
         /*Nota*/
@@ -54,7 +54,7 @@ class NotaController extends Controller
             $item = $this->view->newItem();
             $item->setId($aluno->getId());
             $item->setType($aluno->getType());
-            $this->view->getData()->addRelationships($item->get());
+            //$this->view->getData()->addRelationships($item->get());
             $item->setAttributes($aluno->get());
             $this->view->addIncluded($item);
 

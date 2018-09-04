@@ -75,7 +75,7 @@ class AlunoController extends Controller
         // Preenche a view (JSON API) para retornar um JSON apropriado
         $r = "aluno";
         $rModel = $this->models->{$r}();
-        $alunos = $rModel->readAll();
+        $alunos = $rModel->readAlunoMatriculados($disciplina);
         foreach ($alunos as $aluno) {
             $item = $this->view->newItem();
             $item->setId($aluno->getId());

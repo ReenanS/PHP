@@ -19,7 +19,7 @@ use \Controller\Business\CursoController as CursoController;
 // route generica para um user (prof ou aluno)
 $app->group('/{_:user|professor|aluno}', function () {
 
-    //$this->get('', UserController::class . ':getAllUser');
+    $this->get('', UserController::class . ':getAllUser');
     $this->get('/{uid}', UserController::class . ':getUser');
     $this->post('', UserController::class . ':addUser');
     $this->put('/{uid}', UserController::class . ':editUser');
@@ -37,7 +37,7 @@ $app->group('/{_:user|professor|aluno}', function () {
 // especifico do professor
 $app->group('/professor/{pid}', function () {
 
-    // $this->get('/disciplina', ProfessorController::class . ':getAllLecionaDisciplina');
+    $this->get('/disciplina', ProfessorController::class . ':getAllLecionaDisciplina');
     $this->group('/disciplina/{did}', function () {
         $this->get('', ProfessorController::class . ':getLeciona');
         $this->post('', ProfessorController::class . ':addLeciona');
@@ -45,7 +45,7 @@ $app->group('/professor/{pid}', function () {
         $this->delete('', ProfessorController::class . ':delLeciona');
 
         $this->group('/nota', function () {
-            // $this->get('', NotaController::class . ':getAllDetalheNota');
+            $this->get('', NotaController::class . ':getAllDetalheNota');
             $this->get('/{nid}', NotaController::class . ':getDetalheNota');
 
             $this->post('', NotaController::class . ':addDetalheNota');
@@ -60,7 +60,7 @@ $app->group('/professor/{pid}', function () {
 $app->group('/aluno/{aid}', function () {
 
     $this->group('/disciplina', function () {
-        $this->get('', AlunoController::class . ':getAllMatriculaDisciplina');
+        //$this->get('', AlunoController::class . ':getAllMatriculaDisciplina');
         $this->get('/{did}', AlunoController::class . ':getMatricula');
         // $this->post('/{did}', AlunoController::class . ':addMatricula');
         // $this->delete('/{did}', AlunoController::class . ':delMatricula');

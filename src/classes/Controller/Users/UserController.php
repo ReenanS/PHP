@@ -18,18 +18,6 @@ class UserController extends Controller
         // Retorna todos os usuários, professores ou alunos
         // que estão na base, dependendo do tipo
 
-                
-        // cria uma classe dbo baseado no tipo do user (prof ou aluno)
-        // os {'x'} chama uma function de dentro da classe passando uma string para ela (dinamico)
-        $model = $this->models->{$this->user->getTipo()}();
-
-        $model->readByFK('user', $this->user->getId());
-
-        // busca os dados na BD
-        $this->read($model);
-
-
-        return $response;
     }
 
     public function getUser($request, $response, $args)
