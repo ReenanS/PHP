@@ -1,0 +1,1 @@
+Branch master - É a branch que contém código em nível de produção, ou seja, o código mais maduro existente na sua aplicação. Todo o código novo produzido eventualmente é juntado com a branch master, em algum momento do desenvolvimento;
