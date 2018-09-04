@@ -30,8 +30,6 @@ class AlunoController extends Controller
 
     public function getAllMatriculaAluno($request, $response, $args)
     {
-        // TODO !!
-        // Retorna todos os alunos matriculados na disciplina
         $disciplina = $args['did'];
 
         try {

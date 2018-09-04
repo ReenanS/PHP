@@ -79,11 +79,36 @@ abstract class Controller
                 foreach($allR as $r) {
                     if ($r->getId() == null) continue;
                     $item = $this->view->newItem();
-                    $item->setId($r->getId());
-                    $item->setType($r->getType());
+
+                    if ($r->getType() == "leciona") {
+                        if ($model->getType() == "disciplina") {
+                            $ri = $this->models->professor();
+                            $ri->setId($r->professor);
+                            $ri->read();
+                        } else if ($model->getType() == "professor") {
+                            $ri = $this->models->disciplina();
+                            $ri->setId($r->disciplina);
+                            $ri->read();
+                        }
+                    } else if ($r->getType() == "matricula") {
+                        if ($model->getType() == "disciplina") {
+                            $ri = $this->models->aluno();
+                            $ri->setId($r->aluno);
+                            $ri->read();
+                        } else if ($model->getType() == "aluno") {
+                            $ri = $this->models->disciplina();
+                            $ri->setId($r->disciplina);
+                            $ri->read();
+                        }
+                    } else {
+                        $ri = $r;
+                    }
+
+                    $item->setId($ri->getId());
+                    $item->setType($ri->getType());
                     $data->addRelationships($item->get());
 
-                    $item->setAttributes($r->get());
+                    $item->setAttributes($ri->get());
                     $this->view->addIncluded($item);
                 }
             }
@@ -110,8 +135,33 @@ abstract class Controller
                     foreach($allR as $r) {
                         if ($r->getId() == null) continue;
                         $rItem = $this->view->newItem();
-                        $rItem->setId($r->getId());
-                        $rItem->setType($r->getType());
+
+                        if ($r->getType() == "leciona") {
+                            if ($model->getType() == "disciplina") {
+                                $ri = $this->models->professor();
+                                $ri->setId($r->professor);
+                                $ri->read();
+                            } else if ($model->getType() == "professor") {
+                                $ri = $this->models->disciplina();
+                                $ri->setId($r->disciplina);
+                                $ri->read();
+                            }
+                        } else if ($r->getType() == "matricula") {
+                            if ($model->getType() == "disciplina") {
+                                $ri = $this->models->aluno();
+                                $ri->setId($r->aluno);
+                                $ri->read();
+                            } else if ($model->getType() == "aluno") {
+                                $ri = $this->models->disciplina();
+                                $ri->setId($r->disciplina);
+                                $ri->read();
+                            }
+                        } else {
+                            $ri = $r;
+                        }
+
+                        $rItem->setId($ri->getId());
+                        $rItem->setType($ri->getType());
                         $item->addRelationships($rItem->get());
                     }
                 }
