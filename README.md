@@ -1,0 +1,1 @@
+Branch develop - É a branch que contém código em nível preparatório para o próximo deploy. Ou seja, quando features são terminadas, elas são juntadas com a branch develop, testadas (em conjunto, no caso de mais de uma feature), e somente depois as atualizações da branch develop passam por mais um processo para então ser juntadas com a branch master;
