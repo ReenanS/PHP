@@ -40,7 +40,7 @@ abstract class DBO
         $values = implode(",", $this->getSQL());
         $sql = "INSERT INTO " . $this->table_name .
             " (" . $keys . ") values (" . $values . ');';
-        var_export($sql);
+        // var_export($sql);
         $stmt = $this->db->exec($sql);
         return $this->readId();
     }
@@ -132,7 +132,7 @@ abstract class DBO
         $sql = "UPDATE " . $this->table_name .
             " SET " . $set .
             " WHERE " . $this->table_name . " = \"" . $this->id . "\";";
-        var_export($sql);
+        // var_export($sql);
         $stmt = $this->db->exec($sql);
         return ($stmt > 0);
     }

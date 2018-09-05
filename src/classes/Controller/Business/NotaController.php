@@ -231,7 +231,7 @@ class NotaController extends Controller
             $atrib['aluno'] = $aluno;
             $atrib['matricula'] = $model->getId();
             
-            var_export($atrib);
+            // var_export($atrib);
             $model = $this->models->nota();
             $model->set($atrib);
             $id = $model->create();

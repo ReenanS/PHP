@@ -133,12 +133,12 @@ class UserController extends Controller
             $model->setId($id);
             $model->read();
             $user = $model->user;
-            var_export($model->getId());
+            // var_export($model->getId());
             $model->delete();
 
             $model = $this->models->user();
             $model->setId($user);
-            var_export($model->getId());
+            // var_export($model->getId());
             $model->delete();
             $response = $response->withStatus(204);
 

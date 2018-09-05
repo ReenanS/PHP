@@ -36,7 +36,7 @@ class LecionaDBO extends DBO
                 " FROM " . $this->table_name .
                 " WHERE professor = '" . $this->professor . "'".
                 " AND disciplina = '" . $this->disciplina .  "';";
-            var_export($sql);
+            // var_export($sql);
             $stmt = $this->db->query($sql);
             if ($row = $stmt->fetch()) {
                 $this->setId($row[$this->table_name]);

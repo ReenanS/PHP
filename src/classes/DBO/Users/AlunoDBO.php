@@ -49,7 +49,7 @@ class AlunoDBO extends DBO
             " FROM " . $this->table_name .
             " WHERE " . $k . " = '" . $v . "';";
         }
-        var_export($sql);
+        // var_export($sql);
         $stmt = $this->db->query($sql);
         $response = array();
         while ($row = $stmt->fetch()) {
